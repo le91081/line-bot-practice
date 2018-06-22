@@ -485,47 +485,48 @@ def handle_message(event):
                         label='PTT 表特版 近期大於 10 推的文章',
                         text='PTT 表特版 近期大於 10 推的文章'
                     ),
-                    MessageTemplateAction(
-                        label='來張 imgur 正妹圖片',
-                        text='來張 imgur 正妹圖片'
-                    ),
-                    MessageTemplateAction(
-                        label='隨便來張正妹圖片',
-                        text='隨便來張正妹圖片'
-                    )
+                    # MessageTemplateAction(
+                    #     label='來張 imgur 正妹圖片',
+                    #     text='來張 imgur 正妹圖片'
+                    # ),
+                    # MessageTemplateAction(
+                    #     label='隨便來張正妹圖片',
+                    #     text='隨便來張正妹圖片'
+                    # )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
 
-    buttons_template = TemplateSendMessage(
-        alt_text='目錄 template',
-        template=ButtonsTemplate(
-            title='選擇服務',
-            text='請選擇',
-            thumbnail_image_url='https://i.imgur.com/kzi5kKy.jpg',
-            actions=[
-                MessageTemplateAction(
-                    label='開始玩',
-                    text='開始玩'
-                ),
-                URITemplateAction(
-                    label='影片介紹 阿肥bot',
-                    uri='https://youtu.be/1IxtWgWxtlE'
-                ),
-                URITemplateAction(
-                    label='如何建立自己的 Line Bot',
-                    uri='https://github.com/twtrubiks/line-bot-tutorial'
-                ),
-                URITemplateAction(
-                    label='聯絡作者',
-                    uri='https://www.facebook.com/TWTRubiks?ref=bookmarks'
-                )
-            ]
-        )
-    )
-    line_bot_api.reply_message(event.reply_token, buttons_template)
+    
+    # buttons_template = TemplateSendMessage(
+    #     alt_text='目錄 template',
+    #     template=ButtonsTemplate(
+    #         title='選擇服務',
+    #         text='請選擇',
+    #         thumbnail_image_url='https://i.imgur.com/kzi5kKy.jpg',
+    #         actions=[
+    #             MessageTemplateAction(
+    #                 label='開始玩',
+    #                 text='開始玩'
+    #             ),
+    #             URITemplateAction(
+    #                 label='影片介紹 阿肥bot',
+    #                 uri='https://youtu.be/1IxtWgWxtlE'
+    #             ),
+    #             URITemplateAction(
+    #                 label='如何建立自己的 Line Bot',
+    #                 uri='https://github.com/twtrubiks/line-bot-tutorial'
+    #             ),
+    #             URITemplateAction(
+    #                 label='聯絡作者',
+    #                 uri='https://www.facebook.com/TWTRubiks?ref=bookmarks'
+    #             )
+    #         ]
+    #     )
+    # )
+    # line_bot_api.reply_message(event.reply_token, buttons_template)
 
 
 @handler.add(MessageEvent, message=StickerMessage)
