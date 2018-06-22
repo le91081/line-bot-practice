@@ -485,10 +485,10 @@ def handle_message(event):
                         label='PTT 表特版 近期大於 10 推的文章',
                         text='PTT 表特版 近期大於 10 推的文章'
                     ),
-                    # MessageTemplateAction(
-                    #     label='來張 imgur 正妹圖片',
-                    #     text='來張 imgur 正妹圖片'
-                    # ),
+                    MessageTemplateAction(
+                        label='正妹牆',
+                        uri='https://ptt-beauty-infinite-scroll.herokuapp.com/'
+                    ),
                     # MessageTemplateAction(
                     #     label='隨便來張正妹圖片',
                     #     text='隨便來張正妹圖片'
