@@ -485,7 +485,7 @@ def handle_message(event):
                         label='PTT 表特版 近期大於 10 推的文章',
                         text='PTT 表特版 近期大於 10 推的文章'
                     ),
-                    MessageTemplateAction(
+                    URITemplateAction(
                         label='正妹牆',
                         uri='https://ptt-beauty-infinite-scroll.herokuapp.com/'
                     ),
