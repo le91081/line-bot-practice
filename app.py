@@ -499,8 +499,11 @@ def handle_message(event):
             content = ary[2]
 
             if (linePost(title,money,content)):
+                
+                sum = getMoney(title)
+
                 line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="記帳成功"))
+                event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
             else:
                 line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="老娘罷工拉"))
@@ -561,17 +564,14 @@ def index():
 def postview():
     return render_template('post.html')
 
-
-@app.route("/getusermoney")
-def getMoney():
-
-    data = post.query.filter_by(title="冠宇")
+def getMoney(title):
+    data = post.query.filter_by(title=title)
     print(data)
     sum = 0
     for i in data:
         sum += i.money
     print("Sum", sum)
-    return jsonify(sum)
+    return sum
 
 
 @app.route("/get", methods=['GET'])
