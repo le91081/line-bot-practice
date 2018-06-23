@@ -473,7 +473,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
     if event.message.text == "肥豬滾":
-        print("event.source.roomid",event.source)
+        print("event.source.roomid",event.source.type)
         if event.source.type=="room":
             print("event.source.roomid",event.source)
             room_id = event.source.roomId
