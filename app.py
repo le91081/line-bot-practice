@@ -374,10 +374,11 @@ def handle_message(event):
                         label='看廢文',
                         text='看廢文'
                     ),
+                    # MessageTemplateAction(
+                    #     label='正妹',
+                    #     text='正妹'
+                    # ),
                     MessageTemplateAction(
-                        label='正妹',
-                        text='正妹'
-                    ),MessageTemplateAction(
                         label='記帳內容',
                         text='記帳內容'
                     )
@@ -540,6 +541,12 @@ def handle_message(event):
             s=""
             userAry = []
             postlist = post.query.all()
+
+            if len(postlist) <= 0:
+                line_bot_api.reply_message(
+                    event.reply_token, TextSendMessage(text="沒有任何記錄"))
+                return
+
             for i in postlist:
                 try:
                     userAry.index(i.title)
@@ -562,6 +569,8 @@ def handle_message(event):
     if event.message.text == '重新統計':
         postlist = post.query.delete()
         db.session.commit()
+        line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="全刪光光了"))
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
