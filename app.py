@@ -526,8 +526,6 @@ def handle_message(event):
 
 
     if event.message.text == '成員花錢統計':
-            room_id = event.source.room_id
-            member_ids_res = line_bot_api.get_room_member_ids(room_id)
             s=""
             userAry = []
             post = post.query.all()
