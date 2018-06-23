@@ -505,7 +505,6 @@ def handle_message(event):
                 line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="老娘罷工拉"))
 
-
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
     # 設定 primary_key
