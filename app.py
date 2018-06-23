@@ -563,9 +563,6 @@ def linePost(title,money,content):
     db.session.commit()
     return True
 
-def showAllC:
-    
-
 
 @app.route("/post", methods=['POST'])
 def postMethod():
