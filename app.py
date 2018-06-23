@@ -529,11 +529,20 @@ def handle_message(event):
             room_id = event.source.room_id
             member_ids_res = line_bot_api.get_room_member_ids(room_id)
             s=""
-            for title in member_ids_res:
-                profile = line_bot_api.get_room_member_profile(room_id, user_id)
-                title = profile.display_name
-                sum = getMoney(title)
-                s += "{} 花了 {} 元\n".format(title,sum)
+            userAry = []
+            post = post.query.all()
+            for i in post:
+                try:
+                    userAry.index(i.title)
+                except:
+                    userAry.append(i.title)
+                
+            sumAry = []*len(userAry)
+            for i in post:
+                index = userAry.index(i.title)
+                sumAry[index] += i.money
+            for i in range(len(userAry)):
+                s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
             
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text=s[:-2]))
