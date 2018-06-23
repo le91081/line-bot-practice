@@ -476,9 +476,9 @@ def handle_message(event):
         print("event.source.roomid",event.source.type)
         if event.source.type=="room":
             print("event.source.roomid",event.source)
-            room_id = event.source.roomId
-            line_bot_api.reply_message(event.reply_token,TextSendMessage(text="掰掰"))
-            line_bot_api.leave_room(room_id)
+            #room_id = event.source.roomId
+            line_bot_api.reply_message(event.reply_token,TextSendMessage(text=event.source))
+            #line_bot_api.leave_room(room_id)
         else:
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text="才不要"))
 
