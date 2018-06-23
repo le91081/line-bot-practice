@@ -290,7 +290,8 @@ def panx():
 def handle_message(event):
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
-    print("event",event)
+    if event.source.type=="room":
+        print("event.source.roomid",event.source.roomId)
 
     if event.message.text == "eyny":
         content = eyny_movie()
@@ -467,45 +468,16 @@ def handle_message(event):
                     URITemplateAction(
                         label='正妹牆',
                         uri='https://ptt-beauty-infinite-scroll.herokuapp.com/'
-                    ),
-                    # MessageTemplateAction(
-                    #     label='隨便來張正妹圖片',
-                    #     text='隨便來張正妹圖片'
-                    # )
+                    )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-
-    
-    # buttons_template = TemplateSendMessage(
-    #     alt_text='目錄 template',
-    #     template=ButtonsTemplate(
-    #         title='選擇服務',
-    #         text='請選擇',
-    #         thumbnail_image_url='https://i.imgur.com/kzi5kKy.jpg',
-    #         actions=[
-    #             MessageTemplateAction(
-    #                 label='開始玩',
-    #                 text='開始玩'
-    #             ),
-    #             URITemplateAction(
-    #                 label='影片介紹 阿肥bot',
-    #                 uri='https://youtu.be/1IxtWgWxtlE'
-    #             ),
-    #             URITemplateAction(
-    #                 label='如何建立自己的 Line Bot',
-    #                 uri='https://github.com/twtrubiks/line-bot-tutorial'
-    #             ),
-    #             URITemplateAction(
-    #                 label='聯絡作者',
-    #                 uri='https://www.facebook.com/TWTRubiks?ref=bookmarks'
-    #             )
-    #         ]
-    #     )
-    # )
-    # line_bot_api.reply_message(event.reply_token, buttons_template)
+    if event.message.text == "肥豬滾":
+        room_id = event.source.rooid
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="掰掰"))
+        line_bot_api.leave_room(room_id)
 
 
 if __name__ == '__main__':
