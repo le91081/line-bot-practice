@@ -481,7 +481,7 @@ def handle_message(event):
             template=ButtonsTemplate(
                 title='記帳內容',
                 text='請選擇',
-                thumbnail_image_url='https://i.imgur.com/vkqbLnz.png',
+                thumbnail_image_url='https://i.imgur.com/YSJayCb.png',
                 actions=[
                     URITemplateAction(
                         label='花了多少錢啊',
@@ -514,8 +514,8 @@ def handle_message(event):
             money = int(ary[1])
             content = ary[2]
 
-            if (linePost(title,money,content)):
-                
+            if (linePost(title, money, content)):
+
                 sum = getMoney(title)
 
                 line_bot_api.reply_message(
@@ -523,6 +523,20 @@ def handle_message(event):
             else:
                 line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
+
+
+    if event.message.text.find('成員花錢統計'):
+            room_id = event.source.room_id
+            member_ids_res = line_bot_api.get_room_member_ids(room_id)
+            s=""
+            for title in member_ids_res:
+                profile = line_bot_api.get_room_member_profile(room_id, user_id)
+                title = profile.display_name
+                sum = getMoney(title)
+                s += "{} 花了 {} 元\n".format(title,sum)
+            
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text=s[:-2]))
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
@@ -548,6 +562,9 @@ def linePost(title,money,content):
     db.session.add(p)
     db.session.commit()
     return True
+
+def showAllC:
+    
 
 
 @app.route("/post", methods=['POST'])
