@@ -488,7 +488,8 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="才不要"))
 
     if event.message.text.find('記帳') != -1:
-        print(str(event.source.roomId))
+        json = json.loads(event.source)
+        print(json)
 
 
 class post(db.Model):
