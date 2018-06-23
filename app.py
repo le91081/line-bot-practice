@@ -525,7 +525,7 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
 
 
-    if event.message.text.find('成員花錢統計'):
+    if event.message.text == '成員花錢統計':
             room_id = event.source.room_id
             member_ids_res = line_bot_api.get_room_member_ids(room_id)
             s=""
