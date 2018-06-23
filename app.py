@@ -290,8 +290,6 @@ def panx():
 def handle_message(event):
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
-    if event.source.type=="room":
-        print("event.source.roomid",event.source.roomId)
 
     if event.message.text == "eyny":
         content = eyny_movie()
@@ -475,8 +473,9 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
     if event.message.text == "肥豬滾":
+        print("event.source.roomid",event.source)
         if event.source.type=="room":
-            print("event.source.roomid",event.source.roomId)
+            print("event.source.roomid",event.source)
             room_id = event.source.roomId
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text="掰掰"))
             line_bot_api.leave_room(room_id)
