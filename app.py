@@ -377,6 +377,10 @@ def handle_message(event):
                     MessageTemplateAction(
                         label='正妹',
                         text='正妹'
+                    ),
+                    MessageTemplateAction(
+                        label='記帳內容',
+                        text='記帳內容'
                     )
                 ]
             )
@@ -475,6 +479,23 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
+    if event.message.text == "記帳內容":
+        buttons_template = TemplateSendMessage(
+            alt_text='記帳 template',
+            template=ButtonsTemplate(
+                # title='新聞類型',
+                # text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/vkqbLnz.png',
+                actions=[
+                    URITemplateAction(
+                        label='花了多少錢啊',
+                        uri='https://intense-sierra-14037.herokuapp.com/index'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
     if event.message.text == "肥豬滾":
         # print("event.source.roomid",event.source.roomId)
         if event.source.type == "room":
@@ -506,7 +527,7 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
             else:
                 line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="老娘罷工拉"))
+                event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
@@ -559,6 +580,10 @@ def index():
     mypost = post.query.all()
     return render_template('index.html', mypost=mypost)
 
+@app.route("/self")
+def getself(title):
+    mypost = post.query.filter_by(title=title)
+    return render_template('index.html', mypost=mypost)
 
 @app.route("/postdata")
 def postview():
