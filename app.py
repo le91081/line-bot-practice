@@ -377,6 +377,9 @@ def handle_message(event):
                     MessageTemplateAction(
                         label='正妹',
                         text='正妹'
+                    ),MessageTemplateAction(
+                        label='記帳內容',
+                        text='記帳內容'
                     )
                 ]
             )
@@ -557,8 +560,7 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text=s[:-1]))
 
     if event.message.text == '重新統計':
-        postlist = post.query.all()
-        db.session.delete(postlist)
+        postlist = post.query.delete()
         db.session.commit()
 
 class post(db.Model):
