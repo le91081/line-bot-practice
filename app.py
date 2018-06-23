@@ -534,10 +534,12 @@ def handle_message(event):
                     userAry.index(i.title)
                 except:
                     userAry.append(i.title)
-                
+            
+            print("UserAry Count:",len(userAry))
             sumAry = []*len(userAry)
             for i in postlist:
                 index = userAry.index(i.title)
+                print("Index:",index)
                 sumAry[index] += i.money
             for i in range(len(userAry)):
                 s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
