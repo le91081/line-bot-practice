@@ -489,7 +489,7 @@ def handle_message(event):
 
     if event.message.text.find('記帳') != -1:
         ary = event.message.text.split()
-        if len(ary == 3):
+        if len(ary) == 3:
             room_id = event.source.room_id
             user_id = event.source.user_id
             profile = line_bot_api.get_room_member_profile(room_id, user_id)
