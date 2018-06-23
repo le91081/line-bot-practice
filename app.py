@@ -479,16 +479,19 @@ def handle_message(event):
         # print("event.source.roomid",event.source.roomId)
         if event.source.type == "room":
             print("event.source.roomid", event.source)
-            #room_id = event.source.roomId
+            room_id = event.source.room_id
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="掰掰"))
-            line_bot_api.leave_room("R07b89d7308abecf78f449afa50f556e8")
+            line_bot_api.leave_room(room_id)
         else:
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="才不要"))
 
     if event.message.text.find('記帳') != -1:
-        print(event.source.room_id)
+        room_id = event.source.room_id
+        user_id = event.source.user_id
+        profile = line_bot_api.get_room_member_profile(room_id, user_id)
+        print(profile.display_name)
 
 
 class post(db.Model):
