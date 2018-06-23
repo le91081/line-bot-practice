@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utd-8" />
+</head>
+
+<body>
+    <table style="border:3px #cccccc solid;" cellpadding="10" border='1'>
+        <tr>
+            <th>記錄者</th>
+            <th>內容</th>
+            <th>金額</th>
+            <th>日期</th>
+        </tr>
+        {% for post in mypost %}
+        <tr>
+            <th>{{post.title}}</th>
+            <th>{{post.content}}</th>
+            <th>{{post.money}}</th>
+            <th>{{post.date}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+</body>
+
+</html>

@@ -3,8 +3,10 @@ import re
 import random
 import configparser
 from bs4 import BeautifulSoup
-from flask import Flask, request, abort
-# from imgurpython import ImgurClient
+from flask import Flask, request, abort, json, jsonify, Response, render_template
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.types import INTEGER
+from datetime import datetime
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -15,15 +17,13 @@ from linebot.exceptions import (
 from linebot.models import *
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://bert:1234@localhost/flaskdb'
+db = SQLAlchemy(app)
 config = configparser.ConfigParser()
 config.read("config.ini")
 
 line_bot_api = LineBotApi(config['line_bot']['Channel_Access_Token'])
 handler = WebhookHandler(config['line_bot']['Channel_Secret'])
-# client_id = config['imgur_api']['Client_ID']
-# client_secret = config['imgur_api']['Client_Secret']
-# album_id = config['imgur_api']['Album_ID']
-# API_Get_Image = config['other_api']['API_Get_Image']
 
 
 @app.route("/callback", methods=['POST'])
@@ -182,7 +182,8 @@ def ptt_gossiping():
     for index, article in enumerate(article_gossiping, 0):
         if index == 15:
             return content
-        data = '{}\n{}\n\n'.format(article.get('title', None), article.get('url_link', None))
+        data = '{}\n{}\n\n'.format(article.get(
+            'title', None), article.get('url_link', None))
         content += data
     return content
 
@@ -286,6 +287,7 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print("event.reply_token:", event.reply_token)
@@ -332,7 +334,8 @@ def handle_message(event):
         rs = requests.session()
         res = rs.get(target_url, verify=False)
         soup = BeautifulSoup(res.text, 'html.parser')
-        seqs = ['https://www.youtube.com{}'.format(data.find('a')['href']) for data in soup.select('.yt-lockup-title')]
+        seqs = ['https://www.youtube.com{}'.format(data.find('a')['href'])
+                for data in soup.select('.yt-lockup-title')]
         line_bot_api.reply_message(
             event.reply_token, [
                 TextSendMessage(text=seqs[random.randint(0, len(seqs) - 1)]),
@@ -473,15 +476,89 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
     if event.message.text == "肥豬滾":
-        #print("event.source.roomid",event.source.roomId)
-        if event.source.type=="room":
-            print("event.source.roomid",event.source)
+        # print("event.source.roomid",event.source.roomId)
+        if event.source.type == "room":
+            print("event.source.roomid", event.source)
             #room_id = event.source.roomId
-            line_bot_api.reply_message(event.reply_token,TextSendMessage(text="掰掰"))
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="掰掰"))
             line_bot_api.leave_room("R07b89d7308abecf78f449afa50f556e8")
         else:
-            line_bot_api.reply_message(event.reply_token,TextSendMessage(text="才不要"))
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="才不要"))
+
+    if event.message.text.find('記帳'):
+        print(event.source)
+
+
+class post(db.Model):
+    # __table__name = 'user_table'，若不寫則看 class name
+    # 設定 primary_key
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    content = db.Column(db.String)
+    money = db.Column(db.Integer)
+    date = db.Column(db.Date)
+
+    def __init__(self, title, content, money):
+        self.title = title
+        self.content = content
+        self.money = money
+        self.date = str(datetime.now())
+
+    def __repr__(self):
+        return "Title:{} Content:{} Money:{} Data:{}".format(self.title, self.content, self.money, self.date)
+        # return '<Todo %r>' % self.content
+
+
+@app.route("/post", methods=['POST'])
+def postMethod():
+    data = request.form
+    print(data)
+    p = post(title=data['title'], content=data['content'], money=data['money'])
+    db.session.add(p)
+    db.session.commit()
+    return json.dumps({"status": 200, "comment": "Add Success"})
+
+
+@app.route("/postByJson", methods=['POST'])
+def postByJson():
+    data = request.get_json()
+    p = post(title=data['title'], content=data['content'],
+             money=int(data['money']))
+    db.session.add(p)
+    db.session.commit()
+    return json.dumps({"status": 200, "comment": "Add Success"})
+
+
+@app.route("/index")
+def index():
+    mypost = post.query.all()
+    return render_template('index.html', mypost=mypost)
+
+
+@app.route("/postdata")
+def postview():
+    return render_template('post.html')
+
+
+@app.route("/getusermoney")
+def getMoney():
+
+    data = post.query.filter_by(title="冠宇")
+    print(data)
+    sum = 0
+    for i in data:
+        sum += i.money
+    print("Sum", sum)
+    return jsonify(sum)
+
+
+@app.route("/get", methods=['GET'])
+def getMethod():
+    return json.dumps({"status": 200, "comment": "[ Get Method ] Hello World"})
 
 
 if __name__ == '__main__':
+    app.debug = True
     app.run()
