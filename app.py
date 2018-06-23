@@ -487,7 +487,7 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="才不要"))
 
-    if event.message.text.find('記帳'):
+    if event.message.text.find('記帳') != -1:
         print(event.source)
 
 
