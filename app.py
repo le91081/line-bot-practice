@@ -488,7 +488,7 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="才不要"))
 
     if event.message.text.find('記帳') != -1:
-        print(event.source['userId'])
+        #print(event.source['userId'])
 
 
 class post(db.Model):
