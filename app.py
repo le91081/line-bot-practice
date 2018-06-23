@@ -488,8 +488,8 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="才不要"))
 
     if event.message.text.find('記帳') != -1:
-        json = json.loads(event.source)
-        print(json)
+        j = json.loads(event.source)
+        print(j)
 
 
 class post(db.Model):
