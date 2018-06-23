@@ -528,15 +528,15 @@ def handle_message(event):
     if event.message.text == '成員花錢統計':
             s=""
             userAry = []
-            post = post.query.all()
-            for i in post:
+            postlist = post.query.all()
+            for i in postlist:
                 try:
                     userAry.index(i.title)
                 except:
                     userAry.append(i.title)
                 
             sumAry = []*len(userAry)
-            for i in post:
+            for i in postlist:
                 index = userAry.index(i.title)
                 sumAry[index] += i.money
             for i in range(len(userAry)):
