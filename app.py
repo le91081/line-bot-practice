@@ -479,8 +479,8 @@ def handle_message(event):
         buttons_template = TemplateSendMessage(
             alt_text='記帳 template',
             template=ButtonsTemplate(
-                # title='新聞類型',
-                # text='請選擇',
+                title='記帳內容',
+                text='請選擇',
                 thumbnail_image_url='https://i.imgur.com/vkqbLnz.png',
                 actions=[
                     URITemplateAction(
