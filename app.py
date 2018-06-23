@@ -546,7 +546,7 @@ def handle_message(event):
                 s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
             
             line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text=s[:-2]))
+                event.reply_token, TextSendMessage(text=s[:-1]))
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
