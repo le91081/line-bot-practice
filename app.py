@@ -536,17 +536,17 @@ def handle_message(event):
                     userAry.append(i.title)
             
             print("UserAry Count:",len(userAry))
-            sumAry = []*len(userAry)
+            sumAry = [0]*len(userAry)
             print("sumAry Count:",len(sumAry))
-            # for i in postlist:
-            #     index = userAry.index(i.title)
-            #     print("Index:",index)
-            #     sumAry[index] += i.money
-            # for i in range(len(userAry)):
-            #     s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
+            for i in postlist:
+                index = userAry.index(i.title)
+                print("Index:",index)
+                sumAry[index] += i.money
+            for i in range(len(userAry)):
+                s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
             
-            # line_bot_api.reply_message(
-            #     event.reply_token, TextSendMessage(text=s[:-2]))
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text=s[:-2]))
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
