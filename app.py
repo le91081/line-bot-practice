@@ -483,8 +483,16 @@ def handle_message(event):
                 text='請選擇',
                 thumbnail_image_url='https://i.imgur.com/YSJayCb.png',
                 actions=[
+                    MessageTemplateAction(
+                        label='成員花錢統計',
+                        text='成員花錢統計'
+                    ),
+                    MessageTemplateAction(
+                        label='重新統計',
+                        text='重新統計'
+                    ),
                     URITemplateAction(
-                        label='花了多少錢啊',
+                        label='花錢詳細',
                         uri='https://intense-sierra-14037.herokuapp.com/index'
                     )
                 ]
@@ -547,6 +555,11 @@ def handle_message(event):
             
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text=s[:-1]))
+
+    if event.message.text == '重新統計':
+        postlist = post.query.all()
+        db.session.delete(postlist)
+        db.session.commit()
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
