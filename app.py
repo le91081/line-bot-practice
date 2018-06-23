@@ -17,7 +17,7 @@ from linebot.exceptions import (
 from linebot.models import *
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://bert:1234@localhost/flaskdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ytkxgelqgbtrhs:7d8fca1eb91192298d79771d68f05d69b5b35de8abf5ef120269698adeeecde2@ec2-54-243-40-26.compute-1.amazonaws.com:5432/dev2u2c1ds4u50'
 db = SQLAlchemy(app)
 config = configparser.ConfigParser()
 config.read("config.ini")
