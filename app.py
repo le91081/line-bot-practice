@@ -488,10 +488,22 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="才不要"))
 
     if event.message.text.find('記帳') != -1:
-        room_id = event.source.room_id
-        user_id = event.source.user_id
-        profile = line_bot_api.get_room_member_profile(room_id, user_id)
-        print(profile.display_name)
+        ary = event.message.text.split()
+        if len(ary == 3):
+            room_id = event.source.room_id
+            user_id = event.source.user_id
+            profile = line_bot_api.get_room_member_profile(room_id, user_id)
+
+            title = profile.display_name
+            money = int(ary[1])
+            content = ary[2]
+
+            if (linePost(title,money,content)):
+                line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="記帳成功"))
+            else:
+                line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="老娘罷工拉"))
 
 
 class post(db.Model):
@@ -512,6 +524,12 @@ class post(db.Model):
     def __repr__(self):
         return "Title:{} Content:{} Money:{} Data:{}".format(self.title, self.content, self.money, self.date)
         # return '<Todo %r>' % self.content
+
+def linePost(title,money,content):
+    p = post(title=title, content=content, money=money)
+    db.session.add(p)
+    db.session.commit()
+    return True
 
 
 @app.route("/post", methods=['POST'])
