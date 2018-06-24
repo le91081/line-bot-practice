@@ -504,6 +504,9 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
+
+    #######記帳功能########
+
     if event.message.text == "肥豬滾":
         if event.source.type == "room":
             print("event.source.roomid", event.source)
@@ -519,9 +522,8 @@ def handle_message(event):
         ary = event.message.text.split()
         if len(ary) == 3:
             
+            #聊天室
             if isinstance(event.source, SourceRoom):
-
-
                 room_id = event.source.room_id
                 user_id = event.source.user_id
                 profile = line_bot_api.get_room_member_profile(room_id, user_id)
@@ -530,22 +532,21 @@ def handle_message(event):
                 money = int(ary[1])
                 content = ary[2]
 
-                if (linePost(title, money, content)):
-
-                    sum = getMoney(title)
-
+                if (linePost(title, money, content , user_id,room_id)):
+                    sum = getRoomMoney(title,room_id)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
                 else:
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
 
+            #單人
             elif isinstance(event.source, SourceUser):
                 profile = line_bot_api.get_profile(event.source.user_id)
                 title = profile.display_name
                 money = int(ary[1])
                 content = ary[2]
-                if (linePost(title, money, content)):
+                if (linePost(title, money, content,userid,"")):
                     sum = getMoney(title)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
@@ -553,41 +554,73 @@ def handle_message(event):
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
 
-
     if event.message.text == '成員花錢統計':
             s=""
             userAry = []
-            postlist = post.query.all()
 
-            if len(postlist) <= 0:
+            #聊天室
+            if isinstance(event.source, SourceRoom):
+                room_id = event.source.room_id
+                user_id = event.source.user_id
+                profile = line_bot_api.get_room_member_profile(room_id, user_id)
+                title = profile.display_name
+
+                postlist = post.query.filter_by(room_id == room_id).all()
+
+                if len(postlist) <= 0:
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text="沒有任何記錄"))
+                    return
+
+                for i in postlist:
+                    try:
+                        userAry.index(i.title)
+                    except:
+                        userAry.append(i.title)
+            
+                sumAry = [0]*len(userAry)
+                for i in postlist:
+                    index = userAry.index(i.title)
+                    sumAry[index] += i.money
+                for i in range(len(userAry)):
+                    s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
+            
                 line_bot_api.reply_message(
-                    event.reply_token, TextSendMessage(text="沒有任何記錄"))
-                return
+                    event.reply_token, TextSendMessage(text=s[:-1]))
 
-            for i in postlist:
-                try:
-                    userAry.index(i.title)
-                except:
-                    userAry.append(i.title)
-            
-            print("UserAry Count:",len(userAry))
-            sumAry = [0]*len(userAry)
-            print("sumAry Count:",len(sumAry))
-            for i in postlist:
-                index = userAry.index(i.title)
-                print("Index:",index)
-                sumAry[index] += i.money
-            for i in range(len(userAry)):
-                s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
-            
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text=s[:-1]))
+            #單人
+            elif isinstance(event.source, SourceUser):
+                rofile = line_bot_api.get_profile(event.source.user_id)
+                title = profile.display_name
+                postlist = post.query.filter_by(title == title and room_id == "").all()
 
+                if len(postlist) <= 0:
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text="沒有任何記錄"))
+                    return
+                
+                sum = 0
+                for i in postlist:
+                    sum += i.money
+                s += "你花了 {} 元".format(sum)
+
+                line_bot_api.reply_message(
+                    event.reply_token, TextSendMessage(text=s))
+            
     if event.message.text == '重新統計':
-        postlist = post.query.delete()
-        db.session.commit()
-        line_bot_api.reply_message(
+        if isinstance(event.source, SourceRoom):
+            postlist = post.query.filter_by(room_id=room_id).delete()
+            db.session.commit()
+            line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
+        elif isinstance(event.source, SourceUser):
+            profile = line_bot_api.get_profile(event.source.user_id)
+            title = profile.display_name
+            postlist = post.query.filter_by(title == title and room_id == "").delete()
+            db.session.commit()
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="全刪光光了"))
+
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
@@ -597,42 +630,46 @@ class post(db.Model):
     content = db.Column(db.String)
     money = db.Column(db.Integer)
     date = db.Column(db.Date)
+    roomid = db.Column(db.String)
+    userid = db.Column(db.String)
 
-    def __init__(self, title, content, money):
+    def __init__(self, title, content, money ,roomid,userid):
         self.title = title
         self.content = content
         self.money = money
         self.date = str(datetime.now())
+        self.roomid = roomid
+        self.userid = userid
 
     def __repr__(self):
         return "Title:{} Content:{} Money:{} Data:{}".format(self.title, self.content, self.money, self.date)
         # return '<Todo %r>' % self.content
 
-def linePost(title,money,content):
-    p = post(title=title, content=content, money=money)
+def linePost(title,money,content,userid,roomid):
+    p = post(title=title, content=content, money=money , userid=userid , roomid = roomid)
     db.session.add(p)
     db.session.commit()
     return True
 
 
-@app.route("/post", methods=['POST'])
-def postMethod():
-    data = request.form
-    print(data)
-    p = post(title=data['title'], content=data['content'], money=data['money'])
-    db.session.add(p)
-    db.session.commit()
-    return json.dumps({"status": 200, "comment": "Add Success"})
+# @app.route("/post", methods=['POST'])
+# def postMethod():
+#     data = request.form
+#     print(data)
+#     p = post(title=data['title'], content=data['content'], money=data['money'])
+#     db.session.add(p)
+#     db.session.commit()
+#     return json.dumps({"status": 200, "comment": "Add Success"})
 
 
-@app.route("/postByJson", methods=['POST'])
-def postByJson():
-    data = request.get_json()
-    p = post(title=data['title'], content=data['content'],
-             money=int(data['money']))
-    db.session.add(p)
-    db.session.commit()
-    return json.dumps({"status": 200, "comment": "Add Success"})
+# @app.route("/postByJson", methods=['POST'])
+# def postByJson():
+#     data = request.get_json()
+#     p = post(title=data['title'], content=data['content'],
+#              money=int(data['money']))
+#     db.session.add(p)
+#     db.session.commit()
+#     return json.dumps({"status": 200, "comment": "Add Success"})
 
 
 @app.route("/index")
@@ -658,6 +695,14 @@ def getMoney(title):
     print("Sum", sum)
     return sum
 
+def getRoomMoney(title,roomid):
+    data = post.query.filter_by(title=title and room_id == roomid)
+    print(data)
+    sum = 0
+    for i in data:
+        sum += i.money
+    print("Sum", sum)
+    return sum
 
 @app.route("/get", methods=['GET'])
 def getMethod():
