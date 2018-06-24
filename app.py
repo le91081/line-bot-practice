@@ -296,6 +296,8 @@ def panx():
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
+    print("event.message.type", event.message)
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
