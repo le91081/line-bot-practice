@@ -699,39 +699,8 @@ def handle_message(event):
         data = getNear()
         colAry = []
         if len(data) > 10:
-            # for i in range(10):
-            #     c = CarouselColumn(
-            #         title = data[i]['name'],
-            #         text = data[i]['addr'],
-            #         thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
-            #         actions=[
-            #             MessageTemplateAction(
-            #                 label = data[i]['phone'],
-            #                 text = data[i]['phone']
-            #             ),
-            #             URITemplateAction(
-            #                 label='網頁',
-            #                 uri=data[i]['web']
-            #             ),
-            #             URITemplateAction(
-            #                 label='地圖',
-            #                 uri=data[i]['url']
-            #             )
-            #         ]
-            #     )
-            #     colAry.append(c)
-            
-            # Carousel_template = TemplateSendMessage(
-            #     alt_text='Carousel template',
-            #     template=CarouselTemplate(
-            #         columns=colAry
-            #     )
-            # )
-
-            # line_bot_api.reply_message(event.reply_token, Carousel_template)
-
             colAry = []
-            for i in range(9):
+            for i in range(10):
                 c = CarouselColumn(
                     title = data[i]['name'],
                     text = data[i]['addr'],
