@@ -327,7 +327,7 @@ def handle_locatiom(event):
         )
     )
 
-print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
+    print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
 
     line_bot_api.reply_message(event.reply_token, buttons_template)
     return 0
