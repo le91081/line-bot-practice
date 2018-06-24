@@ -326,6 +326,9 @@ def handle_locatiom(event):
             ]
         )
     )
+
+print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
+
     line_bot_api.reply_message(event.reply_token, buttons_template)
     return 0
     
@@ -734,8 +737,10 @@ def handle_message(event):
             return 0
     if event.message.text.find("查詢附近的") != -1:
         print("----------------Start Search------------------------------")
+
+        print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
         keyword = event.message.text.split('的')[1]
-        data = getNear(myLocalLat,myLocalLng,keyword)
+        data = getNear(keyword)
         colAry = []
 
         if len(data) <=0:
@@ -939,11 +944,11 @@ def getPlace():
 
 
 @app.route("/getNear", methods=['GET'])
-def getNear(lat,lng,keyword):
+def getNear(keyword):
     print("-----------------Start Get Resturant------------------")
     print("--------",lat,lng,keyword,"--------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
-        lat, lng), language="zh-TW", radius=1000)['results']
+        myLocalLat, myLocalLng), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
