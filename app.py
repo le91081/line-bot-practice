@@ -770,6 +770,13 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, Carousel_template)
         return 0
 
+    if event.message.text == "位置":
+        r = requests.post("https://www.googleapis.com/geolocation/v1/geolocate?key={}".format(google_key))
+        print(r.txt)
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="幼幼幼"))
+        return
+
+
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
     # 設定 primary_key
