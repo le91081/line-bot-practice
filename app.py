@@ -6,8 +6,10 @@ from bs4 import BeautifulSoup
 from flask import Flask, request, abort, json, jsonify, Response, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.types import INTEGER
-from sqlalchemy import or_,and_
+from sqlalchemy import or_, and_
 from datetime import datetime
+import googlemaps
+
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -25,6 +27,9 @@ config.read("config.ini")
 
 line_bot_api = LineBotApi(config['line_bot']['Channel_Access_Token'])
 handler = WebhookHandler(config['line_bot']['Channel_Secret'])
+
+google_key = "AIzaSyCkXxylSFeJ0Q-vsTIfkC65PkfGIczMEiY"
+gmaps = googlemaps.Client(key=google_key)
 
 
 @app.route("/callback", methods=['POST'])
@@ -522,32 +527,33 @@ def handle_message(event):
     if event.message.text.find('記帳') != -1:
         ary = event.message.text.split()
         if len(ary) == 3:
-            
-            #聊天室
+
+            # 聊天室
             if isinstance(event.source, SourceRoom):
                 room_id = event.source.room_id
                 user_id = event.source.user_id
-                profile = line_bot_api.get_room_member_profile(room_id, user_id)
+                profile = line_bot_api.get_room_member_profile(
+                    room_id, user_id)
 
                 title = profile.display_name
                 money = int(ary[1])
                 content = ary[2]
 
-                if (linePost(title, money, content , user_id,room_id)):
-                    sum = getRoomMoney(user_id,room_id)
+                if (linePost(title, money, content, user_id, room_id)):
+                    sum = getRoomMoney(user_id, room_id)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
                 else:
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
 
-            #單人
+            # 單人
             elif isinstance(event.source, SourceUser):
                 profile = line_bot_api.get_profile(event.source.user_id)
                 title = profile.display_name
                 money = int(ary[1])
                 content = ary[2]
-                if (linePost(title, money, content,profile.user_id,"")):
+                if (linePost(title, money, content, profile.user_id, "")):
                     sum = getMoney(profile.user_id)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
@@ -556,74 +562,129 @@ def handle_message(event):
                         event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
 
     if event.message.text == '成員花錢統計':
-            s=""
-            userAry = []
+        s = ""
+        userAry = []
 
-            #聊天室
-            if isinstance(event.source, SourceRoom):
-                room_id = event.source.room_id
-                user_id = event.source.user_id
-                profile = line_bot_api.get_room_member_profile(room_id, user_id)
-                title = profile.display_name
-
-                postlist = post.query.filter_by(roomid = room_id).all()
-
-                if len(postlist) <= 0:
-                    line_bot_api.reply_message(
-                        event.reply_token, TextSendMessage(text="沒有任何記錄"))
-                    return
-
-                for i in postlist:
-                    try:
-                        userAry.index(i.title)
-                    except:
-                        userAry.append(i.title)
-            
-                sumAry = [0]*len(userAry)
-                for i in postlist:
-                    index = userAry.index(i.title)
-                    sumAry[index] += i.money
-                for i in range(len(userAry)):
-                    s += "{} 花了 {} 元\n".format(userAry[i],sumAry[i])
-            
-                line_bot_api.reply_message(
-                    event.reply_token, TextSendMessage(text=s[:-1]))
-
-            #單人
-            elif isinstance(event.source, SourceUser):
-                user_id = event.source.user_id
-                profile = line_bot_api.get_profile(user_id)
-                title = profile.display_name
-                postlist = post.query.filter_by(userid=user_id,roomid="").all()
-
-                if len(postlist) <= 0:
-                    line_bot_api.reply_message(
-                        event.reply_token, TextSendMessage(text="沒有任何記錄"))
-                    return
-                
-                sum = 0
-                for i in postlist:
-                    sum += i.money
-                s += "你花了 {} 元".format(sum)
-
-                line_bot_api.reply_message(
-                    event.reply_token, TextSendMessage(text=s))
-            
-    if event.message.text == '重新統計':
+        # 聊天室
         if isinstance(event.source, SourceRoom):
             room_id = event.source.room_id
             user_id = event.source.user_id
             profile = line_bot_api.get_room_member_profile(room_id, user_id)
             title = profile.display_name
-            postlist = post.query.filter_by(userid=user_id,roomid=event.source.room_id).delete()
-            db.session.commit()
+
+            postlist = post.query.filter_by(roomid=room_id).all()
+
+            if len(postlist) <= 0:
+                line_bot_api.reply_message(
+                    event.reply_token, TextSendMessage(text="沒有任何記錄"))
+                return
+
+            for i in postlist:
+                try:
+                    userAry.index(i.title)
+                except:
+                    userAry.append(i.title)
+
+            sumAry = [0]*len(userAry)
+            for i in postlist:
+                index = userAry.index(i.title)
+                sumAry[index] += i.money
+            for i in range(len(userAry)):
+                s += "{} 花了 {} 元\n".format(userAry[i], sumAry[i])
+
             line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="{} 的紀錄全刪光光了".format(title)))
+                event.reply_token, TextSendMessage(text=s[:-1]))
+
+        # 單人
         elif isinstance(event.source, SourceUser):
             user_id = event.source.user_id
             profile = line_bot_api.get_profile(user_id)
             title = profile.display_name
-            postlist = post.query.filter_by(userid=user_id,roomid= "").delete()
+            postlist = post.query.filter_by(userid=user_id, roomid="").all()
+
+            if len(postlist) <= 0:
+                line_bot_api.reply_message(
+                    event.reply_token, TextSendMessage(text="沒有任何記錄"))
+                return
+
+            sum = 0
+            for i in postlist:
+                sum += i.money
+            s += "你花了 {} 元".format(sum)
+
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text=s))
+
+    if event.message.text == '重新統計':
+        confirm_template = TemplateSendMessage(
+            alt_text='確認 template',
+            template=ConfirmTemplate(
+                title='選擇服務',
+                text='確定要重新統計嗎？',
+                thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='確定',
+                        text='快點刪掉紀錄拉'
+                    ),
+                    MessageTemplateAction(
+                        label='取消',
+                        text='我不要了'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, confirm_template)
+        return 0
+
+    if event.message.text == '刪除全部紀錄':
+        confirm_template = TemplateSendMessage(
+            alt_text='確認 template',
+            template=ConfirmTemplate(
+                title='選擇服務',
+                text='確定要全部刪除嗎？',
+                thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='確定',
+                        text='把我的紀錄全部刪光光吧'
+                    ),
+                    MessageTemplateAction(
+                        label='取消',
+                        text='我不要了'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, confirm_template)
+        return 0
+
+
+    if event.message.text == "把我的紀錄全部刪光光吧":
+        user_id = event.source.user_id
+        profile = line_bot_api.get_profile(user_id)
+        title = profile.display_name
+        postlist = post.query.filter_by(userid=user_id).delete()
+        db.session.commit()
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text="{} 的紀錄全刪光光了".format(title)))
+
+    if event.message.text == "快點刪掉紀錄拉":
+        if isinstance(event.source, SourceRoom):
+            room_id = event.source.room_id
+            user_id = event.source.user_id
+            profile = line_bot_api.get_room_member_profile(room_id, user_id)
+            title = profile.display_name
+            postlist = post.query.filter_by(
+                userid=user_id, roomid=event.source.room_id).delete()
+            db.session.commit()
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="{} 刪除此聊天室的紀錄了".format(title)))
+        elif isinstance(event.source, SourceUser):
+            user_id = event.source.user_id
+            profile = line_bot_api.get_profile(user_id)
+            title = profile.display_name
+            postlist = post.query.filter_by(userid=user_id, roomid="").delete()
             db.session.commit()
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
@@ -640,7 +701,7 @@ class post(db.Model):
     roomid = db.Column(db.String)
     userid = db.Column(db.String)
 
-    def __init__(self, title, content, money ,roomid,userid):
+    def __init__(self, title, content, money, roomid, userid):
         self.title = title
         self.content = content
         self.money = money
@@ -652,8 +713,10 @@ class post(db.Model):
         return "Title:{} Content:{} Money:{} Data:{}".format(self.title, self.content, self.money, self.date)
         # return '<Todo %r>' % self.content
 
-def linePost(title,money,content,userid,roomid):
-    p = post(title=title, content=content, money=money , userid=userid , roomid = roomid)
+
+def linePost(title, money, content, userid, roomid):
+    p = post(title=title, content=content,
+             money=money, userid=userid, roomid=roomid)
     db.session.add(p)
     db.session.commit()
     return True
@@ -684,17 +747,20 @@ def index():
     mypost = post.query.all()
     return render_template('index.html', mypost=mypost)
 
+
 @app.route("/self")
 def getself(title):
     mypost = post.query.filter_by(title=title)
     return render_template('index.html', mypost=mypost)
 
+
 @app.route("/postdata")
 def postview():
     return render_template('post.html')
 
+
 def getMoney(userid):
-    data = post.query.filter_by(userid=userid,roomid="")
+    data = post.query.filter_by(userid=userid, roomid="")
     print(data)
     sum = 0
     for i in data:
@@ -702,14 +768,82 @@ def getMoney(userid):
     print("Sum", sum)
     return sum
 
-def getRoomMoney(userid,roomid):
-    data = post.query.filter_by(userid=userid,roomid=roomid)
+
+def getRoomMoney(userid, roomid):
+    data = post.query.filter_by(userid=userid, roomid=roomid)
     print(data)
     sum = 0
     for i in data:
         sum += i.money
     print("Sum", sum)
     return sum
+
+
+@app.route("/getloc", methods=['GET'])
+def getloc():
+    loc = gmaps.geolocate()['location']
+    return loc
+
+
+@app.route("/getPlace", methods=['GET'])
+def getPlace():
+    loc = getloc()
+    gresult = gmaps.places(query="餐廳", location=(
+        loc['lat'], loc['lng']), radius=1000, language="zh-TW")['results']
+    placeAry = []
+    baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
+    for i in gresult:
+        result = gmaps.place(i['place_id'])['result']
+        refer = i['photos'][0]['photo_reference']
+        url = baseUrl.format(refer, google_key)
+        resturant = {
+            'addr': i['formatted_address'],
+            'phone': result['formatted_phone_number'],
+            'id': result['id'],
+            'name': result['name'],
+            'place_id': result['place_id'],
+            'rating': result['rating'],
+            'url': result['url'],
+            # 'web' : result['website'],
+            'phtoUrl': url
+        }
+        placeAry.append(resturant)
+    return jsonify(placeAry)
+
+
+@app.route("/getNear", methods=['GET'])
+def getNear():
+    loc = getloc()
+    aa = gmaps.places_nearby(keyword="餐廳", location=(
+        loc['lat'], loc['lng']), language="zh-TW", radius=1000)['results']
+    nearAry = []
+    baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
+    imgurl = ""
+    for i in aa:
+        result = gmaps.place(i['place_id'])['result']
+        if 'photos' in i:
+            refer = i['photos'][0]['photo_reference']
+            imgurl = baseUrl.format(refer, google_key)
+        addr = i['vicinity'] if 'vicinity' in i else ""
+        phone = result['formatted_phone_number'] if 'formatted_phone_number' in result else ""
+        rating = result['rating'] if 'rating' in result else ""
+        url = result['url'] if 'url' in result else ""
+        web = result['website'] if 'website' in result else ""
+        phtoUrl = imgurl
+
+        resturant = {
+            'addr': addr,
+            'phone': phone,
+            'name': i['name'],
+            'rating': rating,
+            'url': result['url'],
+            'web': web,
+            'phtoUrl': imgurl
+        }
+
+        nearAry.append(resturant)
+
+    return jsonify(nearAry)
 
 
 if __name__ == '__main__':
