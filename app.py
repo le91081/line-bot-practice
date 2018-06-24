@@ -296,11 +296,11 @@ def panx():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    print("--------------------------------------")
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
     print("event.message.type", event.message.type)
     
-
 
     if event.message.text == "eyny":
         content = eyny_movie()
