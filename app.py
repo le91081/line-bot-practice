@@ -501,10 +501,14 @@ def handle_message(event):
                         label='重新統計',
                         text='重新統計'
                     ),
-                    URITemplateAction(
-                        label='花錢詳細',
-                        uri='https://intense-sierra-14037.herokuapp.com/index'
-                    )
+                    MessageTemplateAction(
+                        label='刪除全部紀錄',
+                        text='刪除全部紀錄'
+                    ),
+                    # URITemplateAction(
+                    #     label='花錢詳細',
+                    #     uri='https://intense-sierra-14037.herokuapp.com/index'
+                    # )
                 ]
             )
         )
