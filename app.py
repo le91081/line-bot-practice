@@ -729,7 +729,6 @@ def handle_message(event):
             template=CarouselTemplate(
                 columns=[
                     CarouselColumn(
-                        thumbnail_image_url='顯示在開頭的大圖片網址',
                         title='this is menu1',
                         text='description1',
                         actions=[
@@ -749,7 +748,6 @@ def handle_message(event):
                         ]
                     ),
                     CarouselColumn(
-                        thumbnail_image_url='顯示在開頭的大圖片網址',
                         title='this is menu2',
                         text='description2',
                         actions=[
@@ -771,7 +769,6 @@ def handle_message(event):
                 ]
             )
         )
-
         line_bot_api.reply_message(event.reply_token, Carousel_template)
 
 
