@@ -31,8 +31,8 @@ handler = WebhookHandler(config['line_bot']['Channel_Secret'])
 google_key = "AIzaSyCkXxylSFeJ0Q-vsTIfkC65PkfGIczMEiY"
 gmaps = googlemaps.Client(key=google_key)
 
-myLocalLat = 0.0
-myLocalLng = 0.0
+global myLocalLat
+global myLocalLng
 
 @app.route("/callback", methods=['POST'])
 def callback():
