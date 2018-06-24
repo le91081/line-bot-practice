@@ -698,8 +698,6 @@ def handle_message(event):
     if event.message.text == "附近餐廳":
         data = getNear()
         colAry = []
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="我找找"))
-
         if len(data) > 10:
             # for i in range(10):
             #     c = CarouselColumn(
