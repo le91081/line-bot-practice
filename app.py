@@ -298,7 +298,7 @@ def panx():
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
-    let = event.message.latitude
+    lat = event.message.latitude
     lng = event.message.longitude
     data = getNear(lat,lng)
     colAry = []
