@@ -693,84 +693,38 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="全刪光光了"))
 
     if event.message.text == "附近餐廳":
-       
-
-        # for i in data:
-        #     c = CarouselColumn(
-        #         thumbnail_image_url = c.phtoUrl,
-        #         title = c.name,
-        #         text = c.addr,
-        #         actions=[
-        #             MessageTemplateAction(
-        #                 label = c.phone,
-        #                 text = c.phone
-        #             ),
-        #             URITemplateAction(
-        #                 label='網頁',
-        #                 uri=c.web
-        #             ),
-        #             URITemplateAction(
-        #                 label='地圖',
-        #                 uri=str(c.url)
-        #             )
-        #         ]
-        #     )
-        #     colAry.append(c)
-
-        # Carousel_template = TemplateSendMessage(
-        #     alt_text='Carousel template',
-        #     template=CarouselTemplate(
-        #         columns=colAry
-        #     )
-        # )
-
         data = getNear()
         colAry = []
-        Carousel_template = TemplateSendMessage(
-            alt_text='Carousel template',
-            template=CarouselTemplate(
-                columns=[
-                    CarouselColumn(
-                        title='this is menu1',
-                        text='description1',
-                        actions=[
-                            PostbackTemplateAction(
-                                label='postback1',
-                                text='postback text1',
-                                data='action=buy&itemid=1'
-                            ),
-                            MessageTemplateAction(
-                                label='message1',
-                                text='message text1'
-                            ),
-                            URITemplateAction(
-                                label='uri1',
-                                uri='http://example.com/1'
-                            )
-                        ]
+
+        for i in data:
+            c = CarouselColumn(
+                thumbnail_image_url = c.phtoUrl,
+                title = c.name,
+                text = c.addr,
+                actions=[
+                    MessageTemplateAction(
+                        label = c.phone,
+                        text = c.phone
                     ),
-                    CarouselColumn(
-                        title='this is menu2',
-                        text='description2',
-                        actions=[
-                            PostbackTemplateAction(
-                                label='postback2',
-                                text='postback text2',
-                                data='action=buy&itemid=2'
-                            ),
-                            MessageTemplateAction(
-                                label='message2',
-                                text='message text2'
-                            ),
-                            URITemplateAction(
-                                label='連結2',
-                                uri='http://example.com/2'
-                            )
-                        ]
+                    URITemplateAction(
+                        label='網頁',
+                        uri=c.web
+                    ),
+                    URITemplateAction(
+                        label='地圖',
+                        uri=str(c.url)
                     )
                 ]
             )
+            colAry.append(c)
+
+        Carousel_template = TemplateSendMessage(
+            alt_text='Carousel template',
+            template=CarouselTemplate(
+                columns=colAry
+            )
         )
+        
         line_bot_api.reply_message(event.reply_token, Carousel_template)
 
 
