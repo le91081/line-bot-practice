@@ -693,8 +693,7 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="全刪光光了"))
 
     if event.message.text == "附近餐廳":
-        data = getNear()
-        colAry = []
+       
 
         # for i in data:
         #     c = CarouselColumn(
@@ -718,8 +717,6 @@ def handle_message(event):
         #     )
         #     colAry.append(c)
 
-        print(jsonify(data))
-
         # Carousel_template = TemplateSendMessage(
         #     alt_text='Carousel template',
         #     template=CarouselTemplate(
@@ -727,6 +724,8 @@ def handle_message(event):
         #     )
         # )
 
+        data = getNear()
+        colAry = []
         Carousel_template = TemplateSendMessage(
             alt_text='Carousel template',
             template=CarouselTemplate(
@@ -898,6 +897,10 @@ def getPlace():
 
 @app.route("/getNear", methods=['GET'])
 def getNear():
+    
+    print("-----------------Start Get Resturant------------------")
+
+
     loc = getloc()
     aa = gmaps.places_nearby(keyword="餐廳", location=(
         loc['lat'], loc['lng']), language="zh-TW", radius=1000)['results']
@@ -927,6 +930,8 @@ def getNear():
         }
 
         nearAry.append(resturant)
+
+    print(jsonify(nearAry))
 
     return nearAry
 
