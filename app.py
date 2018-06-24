@@ -896,10 +896,11 @@ def getPlace():
 
 @app.route("/getNear", methods=['GET'])
 def getNear():
-    loc = getloc()
+    #loc = getloc()
+    24.992573, 121.463511
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword="餐廳", location=(
-        loc['lat'], loc['lng']), language="zh-TW", radius=1000)['results']
+        "24.992573", "121.463511"), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
