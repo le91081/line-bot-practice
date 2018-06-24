@@ -936,7 +936,7 @@ def getNear():
         phone = result['formatted_phone_number'] if 'formatted_phone_number' in result else "懶得寫電話"
         rating = result['rating'] if 'rating' in result else ""
         url = result['url'] if 'url' in result else "懶得輸網址"
-        web = result['website'] if 'website' in result else ""
+        web = result['website'] if 'website' in result else "我沒有網站"
         phtoUrl = imgurl
 
         resturant = {
