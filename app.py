@@ -303,8 +303,6 @@ def handle_locatiom(event):
     myLocalLat = event.message.latitude
     myLocalLng = event.message.longitude
 
-    print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
-
     buttons_template = TemplateSendMessage(
         alt_text='地圖 template',
         template=ButtonsTemplate(
@@ -785,7 +783,7 @@ def handle_message(event):
             c = CarouselColumn(
                 title=i['name'],
                 text=i['addr'],
-                thumbnail_image_url=data[i]['phtoUrl'],
+                thumbnail_image_url=i['phtoUrl'],
                 actions=[
                     MessageTemplateAction(
                         label=i['phone'],
@@ -948,7 +946,6 @@ def getNear(keyword):
     global myLocalLat
     global myLocalLng
     print("-----------------Start Get Resturant------------------")
-    print("--------",myLocalLat,myLocalLng,keyword,"--------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
         myLocalLat, myLocalLng), language="zh-TW", radius=1000)['results']
     nearAry = []
@@ -965,7 +962,6 @@ def getNear(keyword):
         url = result['url'] if 'url' in result else "懶得輸網址"
         web = result['website'] if 'website' in result else "https://intense-sierra-14037.herokuapp.com/noWeb"
         phtoUrl = imgurl
-
         resturant = {
             'addr': addr,
             'phone': phone,
