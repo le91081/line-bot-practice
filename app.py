@@ -293,8 +293,8 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
-lat
-lng
+lat = 0.0
+lng = 0.0
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
