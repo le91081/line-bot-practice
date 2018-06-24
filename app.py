@@ -293,8 +293,8 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
-lat = ""
-lng = ""
+lat
+lng
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
@@ -934,7 +934,7 @@ def getPlace():
 def getNear(lat,lng,keyword):
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
-        float(lat), float(lng)), language="zh-TW", radius=1000)['results']
+        lat, lng), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
