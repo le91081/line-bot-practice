@@ -566,7 +566,7 @@ def handle_message(event):
                 profile = line_bot_api.get_room_member_profile(room_id, user_id)
                 title = profile.display_name
 
-                postlist = post.query.filter_by(room_id == room_id).all()
+                postlist = post.query.filter_by(roomid = room_id).all()
 
                 if len(postlist) <= 0:
                     line_bot_api.reply_message(
