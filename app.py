@@ -698,9 +698,9 @@ def handle_message(event):
 
         for i in data:
             c = CarouselColumn(
-                thumbnail_image_url = i['phtoUrl'],
                 title = i['name'],
                 text = i['addr'],
+                thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
                 actions=[
                     MessageTemplateAction(
                         label = i['phone'],
@@ -716,7 +716,10 @@ def handle_message(event):
                     )
                 ]
             )
+            print(c)
             colAry.append(c)
+        
+        
 
         Carousel_template = TemplateSendMessage(
             alt_text='Carousel template',
