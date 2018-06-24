@@ -293,6 +293,8 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
+lat = ""
+lng = ""
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
@@ -300,74 +302,28 @@ def handle_locatiom(event):
     print("event.message.type", event.message)
     lat = event.message.latitude
     lng = event.message.longitude
-    data = getNear(lat,lng)
-    colAry = []
-    if len(data) > 10:
-        colAry = []
-        for i in range(10):
-            c = CarouselColumn(
-                title=data[i]['name'],
-                text=data[i]['addr'],
-                thumbnail_image_url=data[i]['phtoUrl'],
-                actions=[
-                    MessageTemplateAction(
-                        label=data[i]['phone'],
-                        text=data[i]['phone']
-                    ),
-                    URITemplateAction(
-                        label='網頁',
-                        uri=data[i]['web']
-                    ),
-                    URITemplateAction(
-                        label='地圖',
-                        uri=data[i]['url']
-                    )
-                ]
-            )
-            colAry.append(c)
-        print(colAry)
-        Carousel_template = TemplateSendMessage(
-            alt_text='Carousel template',
-            template=CarouselTemplate(
-                columns=colAry
-            )
-        )
-
-        line_bot_api.reply_message(event.reply_token, Carousel_template)
-        return 0
-
-    for i in data:
-        c = CarouselColumn(
-            title=i['name'],
-            text=i['addr'],
-            thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+    buttons_template = TemplateSendMessage(
+        alt_text='地圖 template',
+        template=ButtonsTemplate(
+            title='選擇查詢項目',
+            text='請選擇',
+            thumbnail_image_url='https://static.newmobilelife.com/wp-content/uploads/2015/09/google-maps-works-on-apple-watch_00a.jpg',
             actions=[
                 MessageTemplateAction(
-                    label=i['phone'],
-                    text=i['phone']
+                    label='餐廳',
+                    text='查詢附近的餐廳'
                 ),
-                URITemplateAction(
-                    label='網頁',
-                    uri=i['web']
+                MessageTemplateAction(
+                    label='加油站',
+                    text='查詢附近的加油站'
                 ),
-                URITemplateAction(
-                    label='地圖',
-                    uri=i['url']
+                MessageTemplateAction(
+                    label='捷運站',
+                    text='查詢附近的捷運站'
                 )
             ]
         )
-        colAry.append(c)
-    print(colAry)
-
-    Carousel_template = TemplateSendMessage(
-        alt_text='Carousel template',
-        template=CarouselTemplate(
-            columns=colAry
-        )
-    )
-
-    line_bot_api.reply_message(event.reply_token, Carousel_template)
-    return 0
+    
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -773,9 +729,9 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
-    if event.message.text == "附近餐廳":
-
-        #data = getNear()
+    if event.message.text.find("查詢附近的") != -1:
+        keyword = event.message.text.split('的')[1]
+        data = getNear(lat,lng,keyword)
         colAry = []
         if len(data) > 10:
             colAry = []
@@ -843,14 +799,6 @@ def handle_message(event):
 
         line_bot_api.reply_message(event.reply_token, Carousel_template)
         return 0
-
-    if event.message.text == "位置":
-        r = requests.post(
-            "https://www.googleapis.com/geolocation/v1/geolocate?key={}".format(google_key))
-        print(json.loads(r.text))
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text="幼幼幼"))
-        return
 
 
 class post(db.Model):
@@ -982,10 +930,10 @@ def getPlace():
 
 
 @app.route("/getNear", methods=['GET'])
-def getNear(lat, lng):
+def getNear(lat,lng,keyword):
     loc = getloc()
     print("-----------------Start Get Resturant------------------")
-    aa = gmaps.places_nearby(keyword="餐廳", location=(
+    aa = gmaps.places_nearby(keyword=keyword, location=(
         lat, lng), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
@@ -1016,7 +964,7 @@ def getNear(lat, lng):
 
     print("-----------------End Get Resturant------------------")
 
-    return nearAry
+    return jsonify(nearAry)
 
 
 if __name__ == '__main__':
