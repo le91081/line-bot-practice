@@ -716,19 +716,18 @@ def handle_message(event):
                     )
                 ]
             )
-            print(c)
             colAry.append(c)
         print(colAry)
         
 
-        Carousel_template = TemplateSendMessage(
-            alt_text='Carousel template',
-            template=CarouselTemplate(
-                columns=colAry
-            )
-        )
+        # Carousel_template = TemplateSendMessage(
+        #     alt_text='Carousel template',
+        #     template=CarouselTemplate(
+        #         columns=colAry
+        #     )
+        # )
         
-        line_bot_api.reply_message(event.reply_token, Carousel_template)
+        # line_bot_api.reply_message(event.reply_token, Carousel_template)
 
 
 class post(db.Model):
