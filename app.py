@@ -518,23 +518,40 @@ def handle_message(event):
     if event.message.text.find('記帳') != -1:
         ary = event.message.text.split()
         if len(ary) == 3:
-            room_id = event.source.room_id
-            user_id = event.source.user_id
-            profile = line_bot_api.get_room_member_profile(room_id, user_id)
+            
+            if isinstance(event.source, SourceRoom):
 
-            title = profile.display_name
-            money = int(ary[1])
-            content = ary[2]
 
-            if (linePost(title, money, content)):
+                room_id = event.source.room_id
+                user_id = event.source.user_id
+                profile = line_bot_api.get_room_member_profile(room_id, user_id)
 
-                sum = getMoney(title)
+                title = profile.display_name
+                money = int(ary[1])
+                content = ary[2]
 
-                line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
-            else:
-                line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
+                if (linePost(title, money, content)):
+
+                    sum = getMoney(title)
+
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
+                else:
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
+
+            elif isinstance(event.source, SourceUser):
+                profile = line_bot_api.get_profile(event.source.user_id)
+                title = profile.display_name
+                money = int(ary[1])
+                content = ary[2]
+                if (linePost(title, money, content)):
+                    sum = getMoney(title)
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
+                else:
+                    line_bot_api.reply_message(
+                        event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
 
 
     if event.message.text == '成員花錢統計':
