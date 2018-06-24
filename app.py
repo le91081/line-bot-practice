@@ -298,6 +298,9 @@ def panx():
 def handle_message(event):
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
+    print("event.message.type", event.message.type)
+    
+
 
     if event.message.text == "eyny":
         content = eyny_movie()
@@ -516,10 +519,6 @@ def handle_message(event):
         return 0
 
     #######記帳功能########
-
-    if event.message.type == 'Location':
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
-        return 0
 
     if event.message.text == "肥豬滾":
         if event.source.type == "room":
