@@ -702,14 +702,14 @@ def handle_message(event):
                 text = i['addr'],
                 thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
                 actions=[
-                    MessageTemplateAction(
-                        label = i['phone'],
-                        text = i['phone']
-                    ),
-                    URITemplateAction(
-                        label='網頁',
-                        uri=i['web']
-                    ),
+                    # MessageTemplateAction(
+                    #     label = i['phone'],
+                    #     text = i['phone']
+                    # ),
+                    # URITemplateAction(
+                    #     label='網頁',
+                    #     uri=i['web']
+                    # ),
                     URITemplateAction(
                         label='地圖',
                         uri=i['url']
@@ -718,7 +718,7 @@ def handle_message(event):
             )
             print(c)
             colAry.append(c)
-        
+        print(colAry)
         
 
         Carousel_template = TemplateSendMessage(
