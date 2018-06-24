@@ -927,7 +927,7 @@ def getNear():
 
         nearAry.append(resturant)
 
-    print(jsonify(nearAry))
+    print("-----------------End Get Resturant------------------")
 
     return nearAry
 
