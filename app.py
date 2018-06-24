@@ -591,7 +591,7 @@ def handle_message(event):
 
             #單人
             elif isinstance(event.source, SourceUser):
-                rofile = line_bot_api.get_profile(event.source.user_id)
+                profile = line_bot_api.get_profile(event.source.user_id)
                 title = profile.display_name
                 postlist = post.query.filter_by(title=title,roomid="").all()
 
@@ -688,7 +688,7 @@ def postview():
     return render_template('post.html')
 
 def getMoney(title):
-    data = post.query.filter_by(title=title)
+    data = post.query.filter_by(title=title,roomid="")
     print(data)
     sum = 0
     for i in data:
