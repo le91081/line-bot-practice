@@ -700,7 +700,7 @@ def handle_message(event):
         colAry = []
 
 
-        if len(date) > 10:
+        if len(data) > 10:
             for i in range(10):
                 c = CarouselColumn(
                     title = i['name'],
