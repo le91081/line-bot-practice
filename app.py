@@ -696,7 +696,7 @@ def getMoney(title):
     return sum
 
 def getRoomMoney(title,roomid):
-    data = post.query.filter_by(title=title and room_id == roomid)
+    data = post.query.filter_by(title=title and roomid == roomid)
     print(data)
     sum = 0
     for i in data:
