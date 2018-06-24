@@ -31,6 +31,8 @@ handler = WebhookHandler(config['line_bot']['Channel_Secret'])
 google_key = "AIzaSyCkXxylSFeJ0Q-vsTIfkC65PkfGIczMEiY"
 gmaps = googlemaps.Client(key=google_key)
 
+myLocalLat = 0.0
+myLocalLng = 0.0
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -293,15 +295,12 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
-lat = 0.0
-lng = 0.0
-
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
-    lat = event.message.latitude
-    lng = event.message.longitude
+    myLocalLat = event.message.latitude
+    myLocalLng = event.message.longitude
     buttons_template = TemplateSendMessage(
         alt_text='地圖 template',
         template=ButtonsTemplate(
@@ -941,7 +940,7 @@ def getNear(lat,lng,keyword):
     print("-----------------Start Get Resturant------------------")
     print("--------",lat,lng,keyword,"--------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
-        lat, lng), language="zh-TW", radius=1000)['results']
+        myLocalLat, myLocalLng), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
