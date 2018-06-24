@@ -733,11 +733,11 @@ def handle_message(event):
             # line_bot_api.reply_message(event.reply_token, Carousel_template)
 
             colAry = []
-            for i in range(len(data) - 10):
+            for i in range(5):
                 c = CarouselColumn(
                     title = data[i]['name'],
                     text = data[i]['addr'],
-                    thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+                    thumbnail_image_url=data[i]['phtoUrl'],
                     actions=[
                         MessageTemplateAction(
                             label = data[i]['phone'],
