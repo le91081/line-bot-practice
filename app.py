@@ -952,7 +952,7 @@ def getNear(keyword):
     global myLocalLng
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
-        myLocalLat, myLocalLng), language="zh-TW", radius=2000)['results']
+        myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
