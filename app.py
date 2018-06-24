@@ -534,7 +534,7 @@ def handle_message(event):
                 content = ary[2]
 
                 if (linePost(title, money, content , user_id,room_id)):
-                    sum = getRoomMoney(title,room_id)
+                    sum = getRoomMoney(user_id,room_id)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
                 else:
@@ -548,7 +548,7 @@ def handle_message(event):
                 money = int(ary[1])
                 content = ary[2]
                 if (linePost(title, money, content,profile.user_id,"")):
-                    sum = getMoney(title)
+                    sum = getMoney(profile.user_id)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
                 else:
@@ -591,9 +591,10 @@ def handle_message(event):
 
             #單人
             elif isinstance(event.source, SourceUser):
-                profile = line_bot_api.get_profile(event.source.user_id)
+                user_id = event.source.user_id
+                profile = line_bot_api.get_profile(user_id)
                 title = profile.display_name
-                postlist = post.query.filter_by(title=title,roomid="").all()
+                postlist = post.query.filter_by(userid=user_id,roomid="").all()
 
                 if len(postlist) <= 0:
                     line_bot_api.reply_message(
@@ -610,14 +611,19 @@ def handle_message(event):
             
     if event.message.text == '重新統計':
         if isinstance(event.source, SourceRoom):
-            postlist = post.query.filter_by(roomid=event.source.room_id).delete()
+            room_id = event.source.room_id
+            user_id = event.source.user_id
+            profile = line_bot_api.get_room_member_profile(room_id, user_id)
+            title = profile.display_name
+            postlist = post.query.filter_by(userid=user_id,roomid=event.source.room_id).delete()
             db.session.commit()
             line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="全刪光光了"))
+                event.reply_token, TextSendMessage(text="{} 的紀錄全刪光光了".format(title)))
         elif isinstance(event.source, SourceUser):
-            profile = line_bot_api.get_profile(event.source.user_id)
+            user_id = event.source.user_id
+            profile = line_bot_api.get_profile(user_id)
             title = profile.display_name
-            postlist = post.query.filter_by(title=title,roomid= "").delete()
+            postlist = post.query.filter_by(userid=user_id,roomid= "").delete()
             db.session.commit()
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
@@ -687,8 +693,8 @@ def getself(title):
 def postview():
     return render_template('post.html')
 
-def getMoney(title):
-    data = post.query.filter_by(title=title,roomid="")
+def getMoney(userid):
+    data = post.query.filter_by(userid=userid,roomid="")
     print(data)
     sum = 0
     for i in data:
@@ -696,8 +702,8 @@ def getMoney(title):
     print("Sum", sum)
     return sum
 
-def getRoomMoney(title,roomid):
-    data = post.query.filter_by(title=title,roomid=roomid)
+def getRoomMoney(userid,roomid):
+    data = post.query.filter_by(userid=userid,roomid=roomid)
     print(data)
     sum = 0
     for i in data:
