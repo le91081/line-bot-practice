@@ -695,29 +695,30 @@ def handle_message(event):
     if event.message.text == "附近餐廳":
         data = getNear()
         colAry = []
-        for i in data:
-            c = CarouselColumn(
-                thumbnail_image_url=c.phtoUrl,
-                title=c.name,
-                text=c.addr,
-                actions=[
-                    MessageTemplateAction(
-                        label=c.phone,
-                        text=c.phone
-                    ),
-                    URITemplateAction(
-                        label='網頁',
-                        uri=c.web
-                    ),
-                    URITemplateAction(
-                        label='地圖',
-                        uri=c.url
-                    )
-                ]
-            )
-            colAry.append(c)
 
-        print(jsonify(colAry))
+        # for i in data:
+        #     c = CarouselColumn(
+        #         thumbnail_image_url = c.phtoUrl,
+        #         title = c.name,
+        #         text = c.addr,
+        #         actions=[
+        #             MessageTemplateAction(
+        #                 label = c.phone,
+        #                 text = c.phone
+        #             ),
+        #             URITemplateAction(
+        #                 label='網頁',
+        #                 uri=c.web
+        #             ),
+        #             URITemplateAction(
+        #                 label='地圖',
+        #                 uri=str(c.url)
+        #             )
+        #         ]
+        #     )
+        #     colAry.append(c)
+
+        print(jsonify(data))
 
         # Carousel_template = TemplateSendMessage(
         #     alt_text='Carousel template',
