@@ -737,10 +737,8 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
     if event.message.text.find("查詢附近的") != -1:
-        global myLocalLat
-        global myLocalLng
+
         print("----------------Start Search------------------------------")
-        print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
         keyword = event.message.text.split('的')[1]
         data = getNear(keyword)
         colAry = []
