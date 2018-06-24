@@ -301,6 +301,9 @@ def handle_locatiom(event):
     print("event.message.type", event.message)
     myLocalLat = event.message.latitude
     myLocalLng = event.message.longitude
+
+    print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
+
     buttons_template = TemplateSendMessage(
         alt_text='地圖 template',
         template=ButtonsTemplate(
@@ -940,7 +943,7 @@ def getNear(lat,lng,keyword):
     print("-----------------Start Get Resturant------------------")
     print("--------",lat,lng,keyword,"--------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
-        myLocalLat, myLocalLng), language="zh-TW", radius=1000)['results']
+        lat, lng), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
