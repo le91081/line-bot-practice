@@ -934,7 +934,7 @@ def getPlace():
 def getNear(lat,lng,keyword):
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
-        lat, lng), language="zh-TW", radius=1000)['results']
+        float(lat), float(lng)), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
@@ -964,7 +964,7 @@ def getNear(lat,lng,keyword):
 
     print("-----------------End Get Resturant------------------")
 
-    return jsonify(nearAry)
+    return nearAry
 
 
 if __name__ == '__main__':
