@@ -293,10 +293,81 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
+
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
+    let = event.message.latitude
+    lng = event.message.longitude
+    data = getNear(lat,lng)
+    colAry = []
+    if len(data) > 10:
+        colAry = []
+        for i in range(10):
+            c = CarouselColumn(
+                title=data[i]['name'],
+                text=data[i]['addr'],
+                thumbnail_image_url=data[i]['phtoUrl'],
+                actions=[
+                    MessageTemplateAction(
+                        label=data[i]['phone'],
+                        text=data[i]['phone']
+                    ),
+                    URITemplateAction(
+                        label='網頁',
+                        uri=data[i]['web']
+                    ),
+                    URITemplateAction(
+                        label='地圖',
+                        uri=data[i]['url']
+                    )
+                ]
+            )
+            colAry.append(c)
+        print(colAry)
+        Carousel_template = TemplateSendMessage(
+            alt_text='Carousel template',
+            template=CarouselTemplate(
+                columns=colAry
+            )
+        )
+
+        line_bot_api.reply_message(event.reply_token, Carousel_template)
+        return 0
+
+    for i in data:
+        c = CarouselColumn(
+            title=i['name'],
+            text=i['addr'],
+            thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+            actions=[
+                MessageTemplateAction(
+                    label=i['phone'],
+                    text=i['phone']
+                ),
+                URITemplateAction(
+                    label='網頁',
+                    uri=i['web']
+                ),
+                URITemplateAction(
+                    label='地圖',
+                    uri=i['url']
+                )
+            ]
+        )
+        colAry.append(c)
+    print(colAry)
+
+    Carousel_template = TemplateSendMessage(
+        alt_text='Carousel template',
+        template=CarouselTemplate(
+            columns=colAry
+        )
+    )
+
+    line_bot_api.reply_message(event.reply_token, Carousel_template)
+    return 0
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -305,7 +376,6 @@ def handle_message(event):
     print("event.reply_token:", event.reply_token)
     print("event.message.text:", event.message.text)
     print("event.message.type", event.message.type)
-    
 
     if event.message.text == "eyny":
         content = eyny_movie()
@@ -704,20 +774,20 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
     if event.message.text == "附近餐廳":
-        
-        data = getNear()
+
+        #data = getNear()
         colAry = []
         if len(data) > 10:
             colAry = []
             for i in range(10):
                 c = CarouselColumn(
-                    title = data[i]['name'],
-                    text = data[i]['addr'],
+                    title=data[i]['name'],
+                    text=data[i]['addr'],
                     thumbnail_image_url=data[i]['phtoUrl'],
                     actions=[
                         MessageTemplateAction(
-                            label = data[i]['phone'],
-                            text = data[i]['phone']
+                            label=data[i]['phone'],
+                            text=data[i]['phone']
                         ),
                         URITemplateAction(
                             label='網頁',
@@ -743,13 +813,13 @@ def handle_message(event):
 
         for i in data:
             c = CarouselColumn(
-                title = i['name'],
-                text = i['addr'],
+                title=i['name'],
+                text=i['addr'],
                 thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
                 actions=[
                     MessageTemplateAction(
-                        label = i['phone'],
-                        text = i['phone']
+                        label=i['phone'],
+                        text=i['phone']
                     ),
                     URITemplateAction(
                         label='網頁',
@@ -763,7 +833,6 @@ def handle_message(event):
             )
             colAry.append(c)
         print(colAry)
-        
 
         Carousel_template = TemplateSendMessage(
             alt_text='Carousel template',
@@ -771,14 +840,16 @@ def handle_message(event):
                 columns=colAry
             )
         )
-        
+
         line_bot_api.reply_message(event.reply_token, Carousel_template)
         return 0
 
     if event.message.text == "位置":
-        r = requests.post("https://www.googleapis.com/geolocation/v1/geolocate?key={}".format(google_key))
+        r = requests.post(
+            "https://www.googleapis.com/geolocation/v1/geolocate?key={}".format(google_key))
         print(json.loads(r.text))
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="幼幼幼"))
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text="幼幼幼"))
         return
 
 
@@ -855,6 +926,7 @@ def postview():
 def noWeb():
     return render_template('noWeb.html')
 
+
 def getMoney(userid):
     data = post.query.filter_by(userid=userid, roomid="")
     print(data)
@@ -873,6 +945,7 @@ def getRoomMoney(userid, roomid):
         sum += i.money
     print("Sum", sum)
     return sum
+
 
 def getloc():
     print("-----------------Start Get Location------------------")
@@ -909,11 +982,11 @@ def getPlace():
 
 
 @app.route("/getNear", methods=['GET'])
-def getNear():
+def getNear(lat, lng):
     loc = getloc()
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword="餐廳", location=(
-        "24.992573", "121.463511"), language="zh-TW", radius=1000)['results']
+        lat, lng), language="zh-TW", radius=1000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
