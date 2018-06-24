@@ -593,7 +593,7 @@ def handle_message(event):
             elif isinstance(event.source, SourceUser):
                 rofile = line_bot_api.get_profile(event.source.user_id)
                 title = profile.display_name
-                postlist = post.query.filter_by((title=title),)roomid == "")).all()
+                postlist = post.query.filter_by(title=title,roomid="").all()
 
                 if len(postlist) <= 0:
                     line_bot_api.reply_message(
@@ -617,7 +617,7 @@ def handle_message(event):
         elif isinstance(event.source, SourceUser):
             profile = line_bot_api.get_profile(event.source.user_id)
             title = profile.display_name
-            postlist = post.query.filter_by((title=title),(roomid == "")).delete()
+            postlist = post.query.filter_by(title=title,roomid= "").delete()
             db.session.commit()
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
@@ -697,7 +697,7 @@ def getMoney(title):
     return sum
 
 def getRoomMoney(title,roomid):
-    data = post.query.filter_by((title=title),(roomid == roomid))
+    data = post.query.filter_by(title=title,roomid=roomid)
     print(data)
     sum = 0
     for i in data:
