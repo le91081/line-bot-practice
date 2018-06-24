@@ -945,7 +945,7 @@ def getPlace():
 @app.route("/getNear", methods=['GET'])
 def getNear(keyword):
     print("-----------------Start Get Resturant------------------")
-    print("--------",lat,lng,keyword,"--------")
+    print("--------",myLocalLat,myLocalLng,keyword,"--------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
         myLocalLat, myLocalLng), language="zh-TW", radius=1000)['results']
     nearAry = []
