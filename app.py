@@ -736,6 +736,8 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
     if event.message.text.find("查詢附近的") != -1:
+        global myLocalLat
+        global myLocalLng
         print("----------------Start Search------------------------------")
         print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
         keyword = event.message.text.split('的')[1]
@@ -944,6 +946,8 @@ def getPlace():
 
 @app.route("/getNear", methods=['GET'])
 def getNear(keyword):
+    global myLocalLat
+    global myLocalLng
     print("-----------------Start Get Resturant------------------")
     print("--------",myLocalLat,myLocalLng,keyword,"--------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
