@@ -517,6 +517,10 @@ def handle_message(event):
 
     #######記帳功能########
 
+    if event.message.type == 'Location':
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
+        return 0
+
     if event.message.text == "肥豬滾":
         if event.source.type == "room":
             print("event.source.roomid", event.source)
