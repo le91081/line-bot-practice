@@ -862,9 +862,8 @@ def getRoomMoney(userid, roomid):
     print("Sum", sum)
     return sum
 
-
-@app.route("/getloc", methods=['GET'])
 def getloc():
+    print("-----------------Start Get Location------------------")
     loc = gmaps.geolocate()['location']
     return loc
 
@@ -897,11 +896,8 @@ def getPlace():
 
 @app.route("/getNear", methods=['GET'])
 def getNear():
-    
-    print("-----------------Start Get Resturant------------------")
-
-
     loc = getloc()
+    print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword="餐廳", location=(
         loc['lat'], loc['lng']), language="zh-TW", radius=1000)['results']
     nearAry = []
