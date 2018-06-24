@@ -610,7 +610,7 @@ def handle_message(event):
             
     if event.message.text == '重新統計':
         if isinstance(event.source, SourceRoom):
-            postlist = post.query.filter_by(roomid=room_id).delete()
+            postlist = post.query.filter_by(roomid=event.source.room_id).delete()
             db.session.commit()
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
