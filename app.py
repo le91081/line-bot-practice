@@ -547,10 +547,11 @@ def handle_message(event):
                     sum = getRoomMoney(user_id, room_id)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
+                    return 0
                 else:
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
-
+                    return 0
             # 單人
             elif isinstance(event.source, SourceUser):
                 profile = line_bot_api.get_profile(event.source.user_id)
@@ -561,10 +562,11 @@ def handle_message(event):
                     sum = getMoney(profile.user_id)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
+                    return 0
                 else:
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="老娘罷工拉！！！！"))
-
+                    return 0
     if event.message.text == '成員花錢統計':
         s = ""
         userAry = []
@@ -598,7 +600,7 @@ def handle_message(event):
 
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text=s[:-1]))
-
+            return 0
         # 單人
         elif isinstance(event.source, SourceUser):
             user_id = event.source.user_id
@@ -618,7 +620,7 @@ def handle_message(event):
 
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text=s))
-
+            return 0
     if event.message.text == '重新統計':
         confirm_template = TemplateSendMessage(
             alt_text='確認 template',
@@ -671,7 +673,7 @@ def handle_message(event):
         db.session.commit()
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text="{} 的紀錄全刪光光了".format(title)))
-
+        return 0
     if event.message.text == "快點刪掉紀錄拉":
         if isinstance(event.source, SourceRoom):
             room_id = event.source.room_id
@@ -683,6 +685,7 @@ def handle_message(event):
             db.session.commit()
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="{} 刪除此聊天室的紀錄了".format(title)))
+            return 0
         elif isinstance(event.source, SourceUser):
             user_id = event.source.user_id
             profile = line_bot_api.get_profile(user_id)
@@ -691,10 +694,76 @@ def handle_message(event):
             db.session.commit()
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
-
+            return 0
     if event.message.text == "附近餐廳":
         data = getNear()
         colAry = []
+
+
+        if len(date) > 10:
+            for i in range(10):
+                c = CarouselColumn(
+                    title = i['name'],
+                    text = i['addr'],
+                    thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+                    actions=[
+                        MessageTemplateAction(
+                            label = i['phone'],
+                            text = i['phone']
+                        ),
+                        URITemplateAction(
+                            label='網頁',
+                            uri=i['web']
+                        ),
+                        URITemplateAction(
+                            label='地圖',
+                            uri=i['url']
+                        )
+                    ]
+                )
+                colAry.append(c)
+            
+            Carousel_template = TemplateSendMessage(
+                alt_text='Carousel template',
+                template=CarouselTemplate(
+                    columns=colAry
+                )
+            )
+
+            line_bot_api.reply_message(event.reply_token, Carousel_template)
+
+            colAry = []
+            for i in range(len(data) - 10):
+                c = CarouselColumn(
+                    title = i['name'],
+                    text = i['addr'],
+                    thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+                    actions=[
+                        MessageTemplateAction(
+                            label = i['phone'],
+                            text = i['phone']
+                        ),
+                        URITemplateAction(
+                            label='網頁',
+                            uri=i['web']
+                        ),
+                        URITemplateAction(
+                            label='地圖',
+                            uri=i['url']
+                        )
+                    ]
+                )
+                colAry.append(c)
+
+            Carousel_template = TemplateSendMessage(
+                alt_text='Carousel template',
+                template=CarouselTemplate(
+                    columns=colAry
+                )
+            )
+
+            line_bot_api.reply_message(event.reply_token, Carousel_template)
+            return 0
 
         for i in data:
             c = CarouselColumn(
@@ -702,14 +771,14 @@ def handle_message(event):
                 text = i['addr'],
                 thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
                 actions=[
-                    # MessageTemplateAction(
-                    #     label = i['phone'],
-                    #     text = i['phone']
-                    # ),
-                    # URITemplateAction(
-                    #     label='網頁',
-                    #     uri=i['web']
-                    # ),
+                    MessageTemplateAction(
+                        label = i['phone'],
+                        text = i['phone']
+                    ),
+                    URITemplateAction(
+                        label='網頁',
+                        uri=i['web']
+                    ),
                     URITemplateAction(
                         label='地圖',
                         uri=i['url']
@@ -720,15 +789,15 @@ def handle_message(event):
         print(colAry)
         
 
-        # Carousel_template = TemplateSendMessage(
-        #     alt_text='Carousel template',
-        #     template=CarouselTemplate(
-        #         columns=colAry
-        #     )
-        # )
+        Carousel_template = TemplateSendMessage(
+            alt_text='Carousel template',
+            template=CarouselTemplate(
+                columns=colAry
+            )
+        )
         
-        # line_bot_api.reply_message(event.reply_token, Carousel_template)
-
+        line_bot_api.reply_message(event.reply_token, Carousel_template)
+        return 0
 
 class post(db.Model):
     # __table__name = 'user_table'，若不寫則看 class name
