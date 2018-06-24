@@ -299,6 +299,7 @@ def panx():
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
+    global myLocalLat,myLocalLng
     myLocalLat = event.message.latitude
     myLocalLng = event.message.longitude
 
