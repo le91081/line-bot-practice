@@ -663,7 +663,6 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, confirm_template)
         return 0
 
-
     if event.message.text == "把我的紀錄全部刪光光吧":
         user_id = event.source.user_id
         profile = line_bot_api.get_profile(user_id)
@@ -692,6 +691,39 @@ def handle_message(event):
             db.session.commit()
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
+
+    if event.message.text == "附近餐廳":
+        data = getNear()
+        colAry = []
+        for i in data:
+            c = CarouselColumn(
+                thumbnail_image_url=c.phtoUrl,
+                title=c.name,
+                text=c.addr,
+                actions=[
+                    MessageTemplateAction(
+                        label=c.phone,
+                        text=c.phone
+                    ),
+                    URITemplateAction(
+                        label='網頁',
+                        uri=c.web
+                    ),
+                    URITemplateAction(
+                        label='地圖',
+                        uri=c.url
+                    )
+                ]
+            )
+            colAry.append(c)
+
+        Carousel_template = TemplateSendMessage(
+            alt_text='Carousel template',
+            template=CarouselTemplate(
+                columns=colAry
+            )
+        )
+        
 
 
 class post(db.Model):
@@ -847,7 +879,7 @@ def getNear():
 
         nearAry.append(resturant)
 
-    return jsonify(nearAry)
+    return nearAry
 
 
 if __name__ == '__main__':
