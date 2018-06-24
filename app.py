@@ -546,7 +546,7 @@ def handle_message(event):
                 title = profile.display_name
                 money = int(ary[1])
                 content = ary[2]
-                if (linePost(title, money, content,userid,"")):
+                if (linePost(title, money, content,profile.user_id,"")):
                     sum = getMoney(title)
                     line_bot_api.reply_message(
                         event.reply_token, TextSendMessage(text="記帳成功\n你已花了 {} 元".format(sum)))
