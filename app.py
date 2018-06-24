@@ -785,7 +785,7 @@ def handle_message(event):
             c = CarouselColumn(
                 title=i['name'],
                 text=i['addr'],
-                thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
+                thumbnail_image_url=data[i]['phtoUrl'],
                 actions=[
                     MessageTemplateAction(
                         label=i['phone'],
