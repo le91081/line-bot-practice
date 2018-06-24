@@ -293,6 +293,9 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
+@handler.add(MessageEvent, message=LocationMessage)
+def handle_locatiom(event):
+    print("event.message.type", event.message.type)
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
