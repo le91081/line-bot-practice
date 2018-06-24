@@ -703,21 +703,21 @@ def handle_message(event):
         if len(data) > 10:
             for i in range(10):
                 c = CarouselColumn(
-                    title = i['name'],
-                    text = i['addr'],
+                    title = data[i]['name'],
+                    text = data[i]['addr'],
                     thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
                     actions=[
                         MessageTemplateAction(
-                            label = i['phone'],
-                            text = i['phone']
+                            label = data[i]['phone'],
+                            text = data[i]['phone']
                         ),
                         URITemplateAction(
                             label='網頁',
-                            uri=i['web']
+                            uri=data[i]['web']
                         ),
                         URITemplateAction(
                             label='地圖',
-                            uri=i['url']
+                            uri=data[i]['url']
                         )
                     ]
                 )
@@ -735,21 +735,21 @@ def handle_message(event):
             colAry = []
             for i in range(len(data) - 10):
                 c = CarouselColumn(
-                    title = i['name'],
-                    text = i['addr'],
+                    title = data[i]['name'],
+                    text = data[i]['addr'],
                     thumbnail_image_url='https://i.imgur.com/cliDn19.jpg',
                     actions=[
                         MessageTemplateAction(
-                            label = i['phone'],
-                            text = i['phone']
+                            label = data[i]['phone'],
+                            text = data[i]['phone']
                         ),
                         URITemplateAction(
                             label='網頁',
-                            uri=i['web']
+                            uri=data[i]['web']
                         ),
                         URITemplateAction(
                             label='地圖',
-                            uri=i['url']
+                            uri=data[i]['url']
                         )
                     ]
                 )
