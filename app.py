@@ -731,7 +731,7 @@ def handle_message(event):
             # line_bot_api.reply_message(event.reply_token, Carousel_template)
 
             colAry = []
-            for i in range(8):
+            for i in range(10):
                 c = CarouselColumn(
                     title = data[i]['name'],
                     text = data[i]['addr'],
@@ -933,7 +933,7 @@ def getNear():
             refer = i['photos'][0]['photo_reference']
             imgurl = baseUrl.format(refer, google_key)
         addr = i['vicinity'] if 'vicinity' in i else ""
-        phone = result['formatted_phone_number'] if 'formatted_phone_number' in result else ""
+        phone = result['formatted_phone_number'] if 'formatted_phone_number' in result else "懶得寫電話"
         rating = result['rating'] if 'rating' in result else ""
         url = result['url'] if 'url' in result else ""
         web = result['website'] if 'website' in result else ""
