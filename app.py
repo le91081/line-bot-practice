@@ -696,6 +696,7 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
     if event.message.text == "附近餐廳":
+        
         data = getNear()
         colAry = []
         if len(data) > 10:
@@ -861,6 +862,8 @@ def getRoomMoney(userid, roomid):
 def getloc():
     print("-----------------Start Get Location------------------")
     loc = gmaps.geolocate()['location']
+    print(loc)
+    print("-----------------End Get Location------------------")
     return loc
 
 
@@ -892,8 +895,7 @@ def getPlace():
 
 @app.route("/getNear", methods=['GET'])
 def getNear():
-    #loc = getloc()
-    24.992573, 121.463511
+    loc = getloc()
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword="餐廳", location=(
         "24.992573", "121.463511"), language="zh-TW", radius=1000)['results']
