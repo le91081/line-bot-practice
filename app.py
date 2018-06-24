@@ -299,7 +299,10 @@ def panx():
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
-    global myLocalLat,myLocalLng
+    
+    global myLocalLat
+    global myLocalLng
+    
     myLocalLat = event.message.latitude
     myLocalLng = event.message.longitude
 
@@ -326,6 +329,8 @@ def handle_locatiom(event):
         )
     )
 
+    myLocalLat = event.message.latitude
+    myLocalLng = event.message.longitude
     print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
 
     line_bot_api.reply_message(event.reply_token, buttons_template)
@@ -947,7 +952,7 @@ def getNear(keyword):
     global myLocalLng
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
-        myLocalLat, myLocalLng), language="zh-TW", radius=1000)['results']
+        myLocalLat, myLocalLng), language="zh-TW", radius=2000)['results']
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
