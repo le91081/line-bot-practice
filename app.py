@@ -732,7 +732,7 @@ def handle_message(event):
     if event.message.text.find("查詢附近的") != -1:
         print("----------------Start Search------------------------------")
         keyword = event.message.text.split('的')[1]
-        data = getNear(lat,lng,keyword)
+        data = getNear(myLocalLat,myLocalLng,keyword)
         colAry = []
 
         if len(data) <=0:
