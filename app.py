@@ -698,21 +698,21 @@ def handle_message(event):
 
         for i in data:
             c = CarouselColumn(
-                thumbnail_image_url = i.phtoUrl,
-                title = i.name,
-                text = i.addr,
+                thumbnail_image_url = i['phtoUrl'],
+                title = i['name'],
+                text = i['addr'],
                 actions=[
                     MessageTemplateAction(
-                        label = i.phone,
-                        text = i.phone
+                        label = i['phone'],
+                        text = i['phone']
                     ),
                     URITemplateAction(
                         label='網頁',
-                        uri=i.web
+                        uri=i['web']
                     ),
                     URITemplateAction(
                         label='地圖',
-                        uri=str(i.url)
+                        uri=i['url']
                     )
                 ]
             )
