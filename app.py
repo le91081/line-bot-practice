@@ -731,9 +731,15 @@ def handle_message(event):
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
     if event.message.text.find("查詢附近的") != -1:
+        print("----------------Start Search------------------------------")
         keyword = event.message.text.split('的')[1]
         data = getNear(lat,lng,keyword)
         colAry = []
+
+        if len(data) <=0:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="找不到拉"))
+            return
+
         if len(data) > 10:
             colAry = []
             for i in range(10):
@@ -933,6 +939,7 @@ def getPlace():
 @app.route("/getNear", methods=['GET'])
 def getNear(lat,lng,keyword):
     print("-----------------Start Get Resturant------------------")
+    print("--------",lat,lng,keyword,"--------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
         lat, lng), language="zh-TW", radius=1000)['results']
     nearAry = []
