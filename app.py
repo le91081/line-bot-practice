@@ -307,10 +307,8 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
-#global myLocalLat
-#global myLocalLng
-myLocalLat
-myLocalLng
+global myLocalLat
+global myLocalLng
 
 ####GooglaMap####
 @handler.add(MessageEvent, message=LocationMessage)
@@ -1006,8 +1004,8 @@ def getPlace():
 
 @app.route("/getNear", methods=['GET'])
 def getNear(keyword):
-    #global myLocalLat
-    #global myLocalLng
+    global myLocalLat
+    global myLocalLng
     print("-----------------Start Get Resturant------------------")
     print('-----Lat in function : ',myLocalLat)
     print('-----Lng in function : ',myLocalLng)
