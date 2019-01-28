@@ -31,8 +31,6 @@ handler = WebhookHandler(config['line_bot']['Channel_Secret'])
 google_key = "AIzaSyCkXxylSFeJ0Q-vsTIfkC65PkfGIczMEiY"
 gmaps = googlemaps.Client(key=google_key)
 
-global myLocalLat
-global myLocalLng
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -309,14 +307,19 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
+#global myLocalLat
+#global myLocalLng
+myLocalLat = 0.00
+myLocalLng = 0.00
+
 ####GooglaMap####
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
     
-    global myLocalLat
-    global myLocalLng
+    #global myLocalLat
+    #global myLocalLng
     
     myLocalLat = event.message.latitude
     myLocalLng = event.message.longitude
@@ -354,7 +357,8 @@ def handle_locatiom(event):
 
     line_bot_api.reply_message(event.reply_token, buttons_template)
     return 0
-    
+
+########文字########
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print("--------------------------------------")
@@ -1002,8 +1006,8 @@ def getPlace():
 
 @app.route("/getNear", methods=['GET'])
 def getNear(keyword):
-    global myLocalLat
-    global myLocalLng
+    #global myLocalLat
+    #global myLocalLng
     print("-----------------Start Get Resturant------------------")
     aa = gmaps.places_nearby(keyword=keyword, location=(
         myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
