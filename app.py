@@ -589,11 +589,11 @@ def handle_message(event):
         return 0
 
     #######洗錢防制法#######
-    if event.message.text == "洗錢防制法":
+    if event.message.text == "洗錢防制":
         buttons_template = TemplateSendMessage(
             alt_text='洗錢防制 template',
             template=ButtonsTemplate(
-                title='洗錢',
+                title='洗錢防治資訊',
                 text='請選擇',
                 thumbnail_image_url='https://law.moj.gov.tw/images/logo.png',
                 actions=[
@@ -802,9 +802,11 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="找不到拉"))
             return
 
-        if len(data) > 10:
+        if len(data) > 0:
             colAry = []
             for i in range(10):
+                if data[i]['phtoUrl'] == '':
+                    data[i]['phtoUrl'] = 'https://image.flaticon.com/icons/png/512/66/66455.png'
                 c = CarouselColumn(
                     title=data[i]['name'],
                     text=data[i]['addr'],
@@ -835,7 +837,7 @@ def handle_message(event):
 
             line_bot_api.reply_message(event.reply_token, Carousel_template)
             return 0
-
+        print('------------Process Data---------------')
         for i in data:
             c = CarouselColumn(
                 title=i['name'],
