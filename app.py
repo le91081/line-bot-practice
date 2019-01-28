@@ -797,6 +797,7 @@ def handle_message(event):
 
         print("----------------Start Search------------------------------")
         keyword = event.message.text.split('的')[1]
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="為您搜尋中..."))
         data = getNear(keyword)
         colAry = []
         if data == -1:
@@ -809,7 +810,9 @@ def handle_message(event):
 
         if len(data) > 0:
             colAry = []
-            for i in range(10):
+            datalen = max(10,len(data))
+            print('--------------Processing Data------------------')
+            for i in range(datalen):
                 if data[i]['phtoUrl'] == '':
                     data[i]['phtoUrl'] = 'https://image.flaticon.com/icons/png/512/66/66455.png'
                 c = CarouselColumn(
@@ -832,7 +835,7 @@ def handle_message(event):
                     ]
                 )
                 colAry.append(c)
-            print(colAry)
+            #print(colAry)
             Carousel_template = TemplateSendMessage(
                 alt_text='Carousel template',
                 template=CarouselTemplate(
@@ -842,39 +845,6 @@ def handle_message(event):
 
             line_bot_api.reply_message(event.reply_token, Carousel_template)
             return 0
-        print('------------Process Data---------------')
-        for i in data:
-            c = CarouselColumn(
-                title=i['name'],
-                text=i['addr'],
-                thumbnail_image_url=i['phtoUrl'],
-                actions=[
-                    MessageTemplateAction(
-                        label=i['phone'],
-                        text=i['phone']
-                    ),
-                    URITemplateAction(
-                        label='網頁',
-                        uri=i['web']
-                    ),
-                    URITemplateAction(
-                        label='地圖',
-                        uri=i['url']
-                    )
-                ]
-            )
-            colAry.append(c)
-        print(colAry)
-
-        Carousel_template = TemplateSendMessage(
-            alt_text='Carousel template',
-            template=CarouselTemplate(
-                columns=colAry
-            )
-        )
-
-        line_bot_api.reply_message(event.reply_token, Carousel_template)
-        return 0
 
 
 class post(db.Model):
