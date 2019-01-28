@@ -595,7 +595,7 @@ def handle_message(event):
             template=ButtonsTemplate(
                 title='洗錢防治資訊',
                 text='請選擇',
-                thumbnail_image_url='https://law.moj.gov.tw/images/logo.png',
+                thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
                 actions=[
                     URITemplateAction(
                         label='洗錢防制條文',
