@@ -310,7 +310,7 @@ def panx():
 global myLocalLat
 global myLocalLng
 
-####GooglaMap####
+########GooglaMap########
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
@@ -318,9 +318,6 @@ def handle_locatiom(event):
     
     global myLocalLat
     global myLocalLng
-    
-    #myLocalLat = event.message.latitude
-    #myLocalLng = event.message.longitude
 
     buttons_template = TemplateSendMessage(
         alt_text='地圖 template',
@@ -364,6 +361,7 @@ def handle_message(event):
     print("event.message.text:", event.message.text)
     print("event.message.type", event.message.type)
 
+    #region ######網頁爬蟲######
     if event.message.text == "eyny":
         content = eyny_movie()
         line_bot_api.reply_message(
@@ -560,6 +558,45 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
+    #endregion
+
+    #region #######洗錢防制法#######
+    if event.message.text == "洗錢防制":
+        buttons_template = TemplateSendMessage(
+            alt_text='洗錢防制 template',
+            template=ButtonsTemplate(
+                title='洗錢防治資訊',
+                text='請選擇',
+                thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
+                actions=[
+                    URITemplateAction(
+                        label='洗錢防制條文',
+                        uri='https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0380131'
+                    ),
+                    URITemplateAction(
+                        label='洗錢防治Q&A',
+                        uri='http://www.amlo.moj.gov.tw/lp.asp?ctNode=46267&CtUnit=18890&BaseDSD=7&mp=8004'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
+    #endregion
+
+    #region #######記帳功能########
+
+    if event.message.text == "肥豬滾":
+        if event.source.type == "room":
+            print("event.source.roomid", event.source)
+            room_id = event.source.room_id
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="掰掰"))
+            line_bot_api.leave_room(room_id)
+        else:
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text="才不要"))
+
     if event.message.text == "記帳內容":
         buttons_template = TemplateSendMessage(
             alt_text='記帳 template',
@@ -589,43 +626,6 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-
-    #######洗錢防制法#######
-    if event.message.text == "洗錢防制":
-        buttons_template = TemplateSendMessage(
-            alt_text='洗錢防制 template',
-            template=ButtonsTemplate(
-                title='洗錢防治資訊',
-                text='請選擇',
-                thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
-                actions=[
-                    URITemplateAction(
-                        label='洗錢防制條文',
-                        uri='https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0380131'
-                    ),
-                    URITemplateAction(
-                        label='洗錢防治Q&A',
-                        uri='http://www.amlo.moj.gov.tw/lp.asp?ctNode=46267&CtUnit=18890&BaseDSD=7&mp=8004'
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token, buttons_template)
-        return 0
-
-    #######記帳功能########
-
-    if event.message.text == "肥豬滾":
-        if event.source.type == "room":
-            print("event.source.roomid", event.source)
-            room_id = event.source.room_id
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="掰掰"))
-            line_bot_api.leave_room(room_id)
-        else:
-            line_bot_api.reply_message(
-                event.reply_token, TextSendMessage(text="才不要"))
-
     if event.message.text.find('記帳') != -1:
         ary = event.message.text.split()
         if len(ary) == 3:
@@ -791,7 +791,8 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
-    
+    #endregion
+
     ###地圖功能###
     if event.message.text.find("查詢附近的") != -1:
 
@@ -974,7 +975,7 @@ def getPlace():
         placeAry.append(resturant)
     return jsonify(placeAry)
 
-
+#地圖搜尋func
 @app.route("/getNear", methods=['GET'])
 def getNear(keyword):
     global myLocalLat
