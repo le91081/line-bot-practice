@@ -95,6 +95,20 @@ def apple_news():
         content += '{}\n\n'.format(link)
     return content
 
+def apple_finan_news():
+    target_url = 'https://tw.finance.appledaily.com/realtime/'
+    print('Start parsing appleNews....')
+    rs = requests.session()
+    res = rs.get(target_url, verify=False)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    content = ""
+    for index, data in enumerate(soup.select('.rtddt a'), 0):
+        if index == 5:
+            return content
+        link = data['href']
+        content += 'https://tw.finance.appledaily.com{}\n\n'.format(link)
+    return content
+
 
 def get_page_number(content):
     start_index = content.find('index')
@@ -315,6 +329,10 @@ def handle_locatiom(event):
             thumbnail_image_url='https://static.newmobilelife.com/wp-content/uploads/2015/09/google-maps-works-on-apple-watch_00a.jpg',
             actions=[
                 MessageTemplateAction(
+                    label='銀行',
+                    text='查詢附近的銀行'
+                ),
+                MessageTemplateAction(
                     label='餐廳',
                     text='查詢附近的餐廳'
                 ),
@@ -352,6 +370,12 @@ def handle_message(event):
         return 0
     if event.message.text == "蘋果即時新聞":
         content = apple_news()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
+    if event.message.text == "蘋果財經新聞":
+        content = apple_finan_news()
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
@@ -446,6 +470,10 @@ def handle_message(event):
                 text='請選擇',
                 thumbnail_image_url='https://i.imgur.com/vkqbLnz.png',
                 actions=[
+                    MessageTemplateAction(
+                        label='蘋果財經新聞',
+                        text='蘋果財經新聞'
+                    ),
                     MessageTemplateAction(
                         label='蘋果即時新聞',
                         text='蘋果即時新聞'
@@ -570,8 +598,12 @@ def handle_message(event):
                 thumbnail_image_url='https://law.moj.gov.tw/images/logo.png',
                 actions=[
                     URITemplateAction(
-                        label='條文',
+                        label='洗錢防制條文',
                         uri='https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0380131'
+                    ),
+                    URITemplateAction(
+                        label='洗錢防治Q&A',
+                        uri='http://www.amlo.moj.gov.tw/lp.asp?ctNode=46267&CtUnit=18890&BaseDSD=7&mp=8004'
                     )
                 ]
             )
