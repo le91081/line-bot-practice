@@ -318,11 +318,11 @@ def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
     
-    #global myLocalLat
-    #global myLocalLng
+    global myLocalLat
+    global myLocalLng
     
-    myLocalLat = event.message.latitude
-    myLocalLng = event.message.longitude
+    #myLocalLat = event.message.latitude
+    #myLocalLng = event.message.longitude
 
     buttons_template = TemplateSendMessage(
         alt_text='地圖 template',
@@ -1009,6 +1009,8 @@ def getNear(keyword):
     #global myLocalLat
     #global myLocalLng
     print("-----------------Start Get Resturant------------------")
+    print('-----Lat in function : ',myLocalLat)
+    print('-----Lng in function : ',myLocalLng)
     aa = gmaps.places_nearby(keyword=keyword, location=(
         myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
     nearAry = []
