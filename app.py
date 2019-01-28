@@ -1009,8 +1009,6 @@ def getPlace():
 def getNear(keyword):
     global myLocalLat
     global myLocalLng
-    if myLocalLat:
-        return []
     print("-----------------Start Get Resturant------------------")
     try:
         print('-----Lat in function : ',myLocalLat)
