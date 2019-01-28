@@ -808,9 +808,9 @@ def handle_message(event):
             return
 
         if len(data) > 0:
-            print('------Processing Data')
             colAry = []
-            datalen = max(10,len(data))
+            datalen = min(10,len(data))
+            print('------Processing Data Start')
             for i in range(datalen):
                 if data[i]['phtoUrl'] == '':
                     data[i]['phtoUrl'] = 'https://image.flaticon.com/icons/png/512/66/66455.png'
@@ -834,6 +834,7 @@ def handle_message(event):
                     ]
                 )
                 colAry.append(c)
+            print('------Processing Data End')
             #print(colAry)
             Carousel_template = TemplateSendMessage(
                 alt_text='Carousel template',
