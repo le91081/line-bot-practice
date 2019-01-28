@@ -309,8 +309,8 @@ def panx():
 
 #global myLocalLat
 #global myLocalLng
-myLocalLat = 0.00
-myLocalLng = 0.00
+myLocalLat
+myLocalLng
 
 ####GooglaMap####
 @handler.add(MessageEvent, message=LocationMessage)
