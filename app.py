@@ -295,6 +295,7 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
+####GooglaMap####
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_locatiom(event):
     print("event.message.type", event.message.type)
@@ -559,6 +560,25 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
 
+    #######洗錢防制法#######
+    if event.message.text == "洗錢防制法":
+        buttons_template = TemplateSendMessage(
+            alt_text='洗錢防制 template',
+            template=ButtonsTemplate(
+                title='洗錢',
+                text='請選擇',
+                thumbnail_image_url='https://law.moj.gov.tw/images/logo.png',
+                actions=[
+                    URITemplateAction(
+                        label='條文',
+                        uri='https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0380131'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
+
     #######記帳功能########
 
     if event.message.text == "肥豬滾":
@@ -686,7 +706,6 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, confirm_template)
         return 0
-
     if event.message.text == '刪除全部紀錄':
         confirm_template = TemplateSendMessage(
             alt_text='確認 template',
@@ -708,7 +727,6 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, confirm_template)
         return 0
-
     if event.message.text == "把我的紀錄全部刪光光吧":
         user_id = event.source.user_id
         profile = line_bot_api.get_profile(user_id)
@@ -739,6 +757,8 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token, TextSendMessage(text="全刪光光了"))
             return 0
+    
+    ###地圖功能###
     if event.message.text.find("查詢附近的") != -1:
 
         print("----------------Start Search------------------------------")
