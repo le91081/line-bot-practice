@@ -797,7 +797,13 @@ def handle_message(event):
 
         print("----------------Start Search------------------------------")
         keyword = event.message.text.split('的')[1]
-        #line_bot_api.reply_message(event.reply_token, TextSendMessage(text="為您搜尋中..."))
+
+        if isinstance(event.source,SourceRoom):
+            pass
+        elif isinstance(event.source,SourceUser):
+            user_id = event.source.user_id
+
+        line_bot_api.push_message(user_id,TextSendMessage(text="為您搜尋中..."))
         data = getNear(keyword)
         colAry = []
         if data == -1:
