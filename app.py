@@ -799,6 +799,9 @@ def handle_message(event):
         keyword = event.message.text.split('的')[1]
         data = getNear(keyword)
         colAry = []
+        if data == -1:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="取得位置失敗\n請先公開位置資訊"))
+            return 0
 
         if len(data) <=0:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="找不到拉"))
@@ -1006,9 +1009,14 @@ def getPlace():
 def getNear(keyword):
     global myLocalLat
     global myLocalLng
+    if myLocalLat:
+        return []
     print("-----------------Start Get Resturant------------------")
-    print('-----Lat in function : ',myLocalLat)
-    print('-----Lng in function : ',myLocalLng)
+    try:
+        print('-----Lat in function : ',myLocalLat)
+        print('-----Lng in function : ',myLocalLng)
+    except Exception:
+        return -1
     aa = gmaps.places_nearby(keyword=keyword, location=(
         myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
     nearAry = []
