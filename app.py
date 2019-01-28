@@ -996,9 +996,9 @@ def getNear(keyword):
             refer = i['photos'][0]['photo_reference']
             imgurl = baseUrl.format(refer, google_key)
         addr = i['vicinity'] if 'vicinity' in i else ""
-        phone = result['formatted_phone_number'] if 'formatted_phone_number' in result else "懶得寫電話"
+        phone = result['formatted_phone_number'] if 'formatted_phone_number' in result else "無提供電話"
         rating = result['rating'] if 'rating' in result else ""
-        url = result['url'] if 'url' in result else "懶得輸網址"
+        url = result['url'] if 'url' in result else "無提供網址"
         web = result['website'] if 'website' in result else "https://intense-sierra-14037.herokuapp.com/noWeb"
         phtoUrl = imgurl
         resturant = {
