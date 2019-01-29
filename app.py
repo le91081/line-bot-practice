@@ -906,7 +906,7 @@ def handle_message(event):
             return 0
 
         if len(data) <=0:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="找不到拉"))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="查詢不到結果"))
             return
 
         if len(data) > 0:
@@ -944,7 +944,7 @@ def handle_message(event):
                     columns=colAry
                 )
             )
-            text_template = TextSendMessage(text='正在為您搜尋...')
+            text_template = TextSendMessage(text='以下為搜尋結果')
             line_bot_api.reply_message(event.reply_token, [text_template,Carousel_template])
             return 0
 
