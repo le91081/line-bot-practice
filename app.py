@@ -598,7 +598,6 @@ def handle_message(event):
     if event.message.text == '洗錢防治QA':
         buttons_template = TemplateSendMessage(
             alt_text='洗錢防治QA template',
-            thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
             template=ButtonsTemplate(
                 title='洗錢防治QA',
                 text="請選擇",
@@ -619,10 +618,10 @@ def handle_message(event):
                         label='國家洗錢防制做太好，是否不利拼經濟？',
                         text='國家洗錢防制做太好，是否不利拼經濟？'
                     ),
-                    URITemplateAction(
-                        label='看所有問答',
-                        uri='http://www.amlo.moj.gov.tw/lp.asp?ctNode=46267&CtUnit=18890&BaseDSD=7&mp=8004'
-                    )
+                    # URITemplateAction(
+                    #     label='看所有問答',
+                    #     uri='http://www.amlo.moj.gov.tw/lp.asp?ctNode=46267&CtUnit=18890&BaseDSD=7&mp=8004'
+                    # )
                 ]
             )
         )
