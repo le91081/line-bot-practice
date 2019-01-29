@@ -598,6 +598,7 @@ def handle_message(event):
     if event.message.text == '洗錢防治QA':
         buttons_template = TemplateSendMessage(
             alt_text='洗錢防治QA template',
+            thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
             template=ButtonsTemplate(
                 title='洗錢防治QA',
                 text="請選擇",
