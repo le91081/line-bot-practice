@@ -607,14 +607,14 @@ def handle_message(event):
                         label='什麼是洗錢',
                         text='什麼是洗錢'
                     ),
-                    MessageTemplateAction(
-                        label='洗錢的樣態有哪些',
-                        text='洗錢的樣態有哪些'
-                    ),
-                    MessageTemplateAction(
-                        label='我國法律有處罰洗錢的行為嗎',
-                        text='我國法律有處罰洗錢的行為嗎'
-                    ),
+                    # MessageTemplateAction(
+                    #     label='洗錢的樣態有哪些',
+                    #     text='洗錢的樣態有哪些'
+                    # ),
+                    # MessageTemplateAction(
+                    #     label='我國法律有處罰洗錢的行為嗎',
+                    #     text='我國法律有處罰洗錢的行為嗎'
+                    # ),
                     # MessageTemplateAction(
                     #     label='國家洗錢防制做太好，是否不利拼經濟',
                     #     text='國家洗錢防制做太好，是否不利拼經濟'
