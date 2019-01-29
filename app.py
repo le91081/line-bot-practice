@@ -581,21 +581,21 @@ def handle_message(event):
                         label='條文檢索',
                         uri='https://law.moj.gov.tw/LawClass/LawSearchCNKey.aspx?BTNType=CON&pcode=G0380131'
                     ),
-                    URITemplateAction(
-                        label='沿革',
-                        uri='https://law.moj.gov.tw/LawClass/LawHistory.aspx?pcode=G0380131'
-                    ),
-                    URITemplateAction(
-                        label='立法歷程',
-                        uri='https://lis.ly.gov.tw/lglawc/lglawkm'
-                    )
+                    # URITemplateAction(
+                    #     label='沿革',
+                    #     uri='https://law.moj.gov.tw/LawClass/LawHistory.aspx?pcode=G0380131'
+                    # ),
+                    # URITemplateAction(
+                    #     label='立法歷程',
+                    #     uri='https://lis.ly.gov.tw/lglawc/lglawkm'
+                    # )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
     
-    if event.message.text == "洗錢防治Q&A":
+    if event.message.text == "洗錢防治QA":
         buttons_template = TemplateSendMessage(
             alt_text='洗錢防治Q&A template',
             template=ButtonComponent(
