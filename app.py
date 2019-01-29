@@ -582,6 +582,36 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
+
+    if event.message.text == '線上辦卡':
+        buttons_template = TemplateSendMessage(
+            alt_text='線上辦卡 template',
+            template=ButtonsTemplate(
+                title='線上辦卡',
+                text='''ｅ指辦卡，提供您線上快速申辦信用卡服務，申辦方式：\n
+                (1) 本行存戶或正卡卡友：透過簡訊密碼驗證，線上快速辦卡。\n
+                (2) 非存戶或新卡友：可以透過自然人憑證+讀卡機 或 指定銀行信用卡，檢附身分證影本、近三個月財力證明，免書面填寫、免郵寄，快速又便利。\n
+                ※ 僅限申辦正卡，若需申辦附卡可轉接專人索取申請書。''',
+                actions=[
+                    MessageTemplateAction(
+                        label='申請信用卡的財力證明有哪些',
+                        text='申請信用卡的財力證明有哪些'
+                    ),
+                    MessageTemplateAction(
+                        label='如何補交申請信用卡或額度調整的缺件資料?',
+                        text='如何補交申請信用卡或額度調整的缺件資料?'
+                    ),
+                    MessageTemplateAction(
+                        label='e指辦卡首刷滿額禮活動',
+                        text='e指辦卡首刷滿額禮活動'
+                    ),
+                    URITemplateAction(
+                        label='了解更多申辦流程',
+                        uri='http://www.esunbank.com.tw/event/credit/1040325ecard/#process'
+                    )
+                ]
+            )
+        )
     #endregion
 
     #region #######記帳功能########
