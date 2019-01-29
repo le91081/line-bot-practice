@@ -604,20 +604,20 @@ def handle_message(event):
                 text="請選擇",
                 actions=[
                     MessageTemplateAction(
-                        label='什麼是洗錢',
-                        text='什麼是洗錢'
+                        label='什麼是洗錢？',
+                        text='什麼是洗錢？'
                     ),
                     MessageTemplateAction(
-                        label='洗錢的樣態有哪些',
-                        text='洗錢的樣態有哪些'
+                        label='洗錢的樣態有哪些？',
+                        text='洗錢的樣態有哪些？'
                     ),
                     MessageTemplateAction(
-                        label='我國法律有處罰洗錢的行為嗎',
-                        text='我國法律有處罰洗錢的行為嗎'
+                        label='我國法律有處罰洗錢的行為嗎？',
+                        text='我國法律有處罰洗錢的行為嗎？'
                     ),
                     MessageTemplateAction(
-                        label='國家洗錢防制做太好，是否不利拼經濟',
-                        text='國家洗錢防制做太好，是否不利拼經濟'
+                        label='國家洗錢防制做太好，是否不利拼經濟？',
+                        text='國家洗錢防制做太好，是否不利拼經濟？'
                     ),
                 ]
             )
@@ -627,12 +627,12 @@ def handle_message(event):
 
     if event.message.text == '什麼是洗錢？':
         line_bot_api.reply_message(event.reply_token,
-            TextSendMessage(text='洗錢就是「清洗黑錢\n是指將各種特定犯罪不法所得\n以各種手段掩飾、隱匿而使犯罪所得在形式上合法化的行為\n並避免被追查。'))
+            TextSendMessage(text='洗錢就是「清洗黑錢」\n是指將各種特定犯罪不法所得\n以各種手段掩飾、隱匿而使犯罪所得在形式上合法化的行為\n並避免被追查。'))
         return 0
     
     if event.message.text == '洗錢的樣態有哪些？':
         line_bot_api.reply_message(event.reply_token,
-            TextSendMessage(text='洗錢的態樣很多樣，大致可以分為可分類為「處置」、「分層化」及「整合」。\n例如將大筆不法所得分散成小額款項分批存入銀行帳戶\n或把不法所得轉移至境外存入外國金融機構\n或以不法所得購買藝術品、古董、貴金屬和寶石等高價值商品，再出售而獲取對價等\n或將不法所得轉匯至他帳戶\n或將現金存款轉變為其他金融票據、投資股票、債券和人壽保險\n或利用空殼公司隱匿不法資產等\n或將不法所得進行產業投資而經營正常工商活動\n或購買不動產、跑車、遊艇等奢侈品。'))
+            TextSendMessage(text='洗錢的態樣很多樣，大致可以分為可分類為「處置」、「分層化」及「整合」。例如將大筆不法所得分散成小額款項分批存入銀行帳戶；或把不法所得轉移至境外存入外國金融機構；或以不法所得購買藝術品、古董、貴金屬和寶石等高價值商品，再出售而獲取對價等;或將不法所得轉匯至他帳戶；或將現金存款轉變為其他金融票據、投資股票、債券和人壽保險；或利用空殼公司隱匿不法資產等;或將不法所得進行產業投資而經營正常工商活動，或購買不動產、跑車、遊艇等奢侈品。'))
         return 0
 
     if event.message.text == '線上辦卡':
