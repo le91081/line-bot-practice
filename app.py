@@ -619,6 +619,10 @@ def handle_message(event):
                         label='國家洗錢防制做太好，是否不利拼經濟？',
                         text='國家洗錢防制做太好，是否不利拼經濟？'
                     ),
+                    URITemplateAction(
+                        label='看所有問答',
+                        uri='http://www.amlo.moj.gov.tw/lp.asp?ctNode=46267&CtUnit=18890&BaseDSD=7&mp=8004'
+                    )
                 ]
             )
         )
@@ -653,16 +657,12 @@ def handle_message(event):
                 text="ｅ指辦卡",
                 actions=[
                     MessageTemplateAction(
-                        label='申請信用卡的財力證明有哪些',
-                        text='申請信用卡的財力證明有哪些'
+                        label='申請信用卡的財力證明有哪些?',
+                        text='申請信用卡的財力證明有哪些?'
                     ),
                     MessageTemplateAction(
                         label='如何補交申請信用卡或額度調整的缺件資料?',
                         text='如何補交申請信用卡或額度調整的缺件資料?'
-                    ),
-                    MessageTemplateAction(
-                        label='e指辦卡首刷滿額禮活動',
-                        text='e指辦卡首刷滿額禮活動'
                     ),
                     URITemplateAction(
                         label='了解更多申辦流程',
@@ -673,6 +673,16 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
+
+    if event.message.text == '申請信用卡的財力證明有哪些?':
+        line_bot_api.reply_message(event.reply_token,
+            TextSendMessage(text='申請信用卡、調升永久額度或辦理貸款，請至少提供一項財力證明：\n(1) 近三個月薪資轉帳存摺封面及內頁影本或薪資單(袋)。\n(2) 最近一年所得扣繳憑單。 \n(3) 其他財力證明如定存證明、所有權狀或各類稅單等。'))
+        return 0
+    if event.message.text == '如何補交申請信用卡或額度調整的缺件資料?':
+        line_bot_api.reply_message(event.reply_token,
+            TextSendMessage(text='申請信用卡或額度調整，可透過官網或行動銀行等補交身分證或財力證明：\n(1) 官網：信用卡影像上傳系統。\n(2) 玉山行動銀行：點選信用卡專區→申請資料上傳。\n(3) 信用卡申請補件請傳真至徵審專線 02-2995-2713 (請於空白處註明姓名及身分證字號，若有徵審人員分機請一併填寫)。'))
+        return 0
+
     #endregion
 
     #region #######記帳功能########
