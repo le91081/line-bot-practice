@@ -318,7 +318,7 @@ def handle_locatiom(event):
     
     global myLocalLat
     global myLocalLng
-
+    
     buttons_template = TemplateSendMessage(
         alt_text='地圖 template',
         template=ButtonsTemplate(
@@ -598,7 +598,6 @@ def handle_message(event):
     if event.message.text == '洗錢防治QA':
         buttons_template = TemplateSendMessage(
             alt_text='洗錢防治QA template',
-            thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
             template=ButtonsTemplate(
                 title='洗錢防治QA',
                 text="請選擇",
@@ -678,6 +677,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,
             TextSendMessage(text='申請信用卡、調升永久額度或辦理貸款，請至少提供一項財力證明：\n(1) 近三個月薪資轉帳存摺封面及內頁影本或薪資單(袋)。\n(2) 最近一年所得扣繳憑單。 \n(3) 其他財力證明如定存證明、所有權狀或各類稅單等。'))
         return 0
+    
     if event.message.text == '如何補交申請信用卡或額度調整的缺件資料?':
         line_bot_api.reply_message(event.reply_token,
             TextSendMessage(text='申請信用卡或額度調整，可透過官網或行動銀行等補交身分證或財力證明：\n(1) 官網：信用卡影像上傳系統。\n(2) 玉山行動銀行：點選信用卡專區→申請資料上傳。\n(3) 信用卡申請補件請傳真至徵審專線 02-2995-2713 (請於空白處註明姓名及身分證字號，若有徵審人員分機請一併填寫)。'))
@@ -944,8 +944,8 @@ def handle_message(event):
                     columns=colAry
                 )
             )
-
-            line_bot_api.reply_message(event.reply_token, Carousel_template)
+            text_template = TextSendMessage(text='正在為您搜尋...')
+            line_bot_api.reply_message(event.reply_token, [text_template,Carousel_template])
             return 0
 
 
