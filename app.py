@@ -615,10 +615,10 @@ def handle_message(event):
                         label='我國法律有處罰洗錢的行為嗎？',
                         text='我國法律有處罰洗錢的行為嗎？'
                     ),
-                    MessageTemplateAction(
-                        label='國家洗錢防制做太好，是否不利拼經濟',
-                        text='國家洗錢防制做太好，是否不利拼經濟'
-                    )
+                    # MessageTemplateAction(
+                    #     label='國家洗錢防制做太好，是否不利拼經濟',
+                    #     text='國家洗錢防制做太好，是否不利拼經濟'
+                    # )
                 ]
             )
         )
