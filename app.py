@@ -594,31 +594,31 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    
-    if event.message.text == "洗錢防治QA":
+  
+    if event.message.text == '洗錢防治QA':
         buttons_template = TemplateSendMessage(
             alt_text='洗錢防治QA template',
-            template=ButtonComponent(
+            thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
+            template=ButtonsTemplate(
                 title='洗錢防治QA',
-                text='請選擇',
-                thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
+                text="請選擇",
                 actions=[
                     MessageTemplateAction(
                         label='什麼是洗錢',
                         text='什麼是洗錢'
                     ),
-                    # MessageTemplateAction(
-                    #     label='洗錢的樣態有哪些',
-                    #     text='洗錢的樣態有哪些'
-                    # ),
-                    # MessageTemplateAction(
-                    #     label='我國法律有處罰洗錢的行為嗎',
-                    #     text='我國法律有處罰洗錢的行為嗎'
-                    # ),
-                    # MessageTemplateAction(
-                    #     label='國家洗錢防制做太好，是否不利拼經濟',
-                    #     text='國家洗錢防制做太好，是否不利拼經濟'
-                    # )
+                    MessageTemplateAction(
+                        label='洗錢的樣態有哪些',
+                        text='洗錢的樣態有哪些'
+                    ),
+                    MessageTemplateAction(
+                        label='我國法律有處罰洗錢的行為嗎',
+                        text='我國法律有處罰洗錢的行為嗎'
+                    ),
+                    MessageTemplateAction(
+                        label='國家洗錢防制做太好，是否不利拼經濟',
+                        text='國家洗錢防制做太好，是否不利拼經濟'
+                    ),
                 ]
             )
         )
