@@ -561,26 +561,78 @@ def handle_message(event):
     #endregion
 
     #region #######洗錢防制法#######
-    if event.message.text == "洗錢防制":
+    if event.message.text == "洗錢防制法":
         buttons_template = TemplateSendMessage(
-            alt_text='洗錢防制 template',
+            alt_text='洗錢防制法 template',
             template=ButtonsTemplate(
-                title='洗錢防治資訊',
+                title='洗錢防治法資訊',
                 text='請選擇',
                 thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
                 actions=[
                     URITemplateAction(
-                        label='洗錢防制條文',
+                        label='所有條文',
                         uri='https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0380131'
                     ),
                     URITemplateAction(
-                        label='洗錢防治Q&A',
-                        uri='http://www.amlo.moj.gov.tw/lp.asp?ctNode=46267&CtUnit=18890&BaseDSD=7&mp=8004'
+                        label='條文查詢',
+                        uri='https://law.moj.gov.tw/LawClass/LawSearchCNKey.aspx?BTNType=NO&pcode=G0380131'
+                    ),
+                    URITemplateAction(
+                        label='條文檢索',
+                        uri='https://law.moj.gov.tw/LawClass/LawSearchCNKey.aspx?BTNType=CON&pcode=G0380131'
+                    ),
+                    URITemplateAction(
+                        label='沿革',
+                        uri='https://law.moj.gov.tw/LawClass/LawHistory.aspx?pcode=G0380131'
+                    ),
+                    URITemplateAction(
+                        label='立法歷程',
+                        uri='https://lis.ly.gov.tw/lglawc/lglawkm'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
+    
+    if event.message.text == "洗錢防治Q&A":
+        buttons_template = TemplateSendMessage(
+            alt_text='洗錢防治Q&A template',
+            template=ButtonComponent(
+                title='洗錢防治Q&A',
+                text='請選擇',
+                thumbnail_image_url='https://images.law.com/contrib/content/uploads/sites/389/2018/05/050418gavel-and-law-books.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='什麼是洗錢？',
+                        text='什麼是洗錢？'
+                    ),
+                    MessageTemplateAction(
+                        label='洗錢的樣態有哪些？',
+                        text='洗錢的樣態有哪些？'
+                    ),
+                    MessageTemplateAction(
+                        label='我國法律有處罰洗錢的行為嗎？',
+                        text='我國法律有處罰洗錢的行為嗎？'
+                    ),
+                    MessageTemplateAction(
+                        label='國家洗錢防制做太好，是否不利拼經濟',
+                        text='國家洗錢防制做太好，是否不利拼經濟'
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
+
+    if event.message.text == '什麼是洗錢？':
+        line_bot_api.reply_message(event.reply_token,
+            TextSendMessage(text='洗錢就是「清洗黑錢\n是指將各種特定犯罪不法所得\n以各種手段掩飾、隱匿而使犯罪所得在形式上合法化的行為\n並避免被追查。'))
+        return 0
+    
+    if event.message.text == '洗錢的樣態有哪些？':
+        line_bot_api.reply_message(event.reply_token,
+            TextSendMessage(text='洗錢的態樣很多樣，大致可以分為可分類為「處置」、「分層化」及「整合」。\n例如將大筆不法所得分散成小額款項分批存入銀行帳戶\n或把不法所得轉移至境外存入外國金融機構\n或以不法所得購買藝術品、古董、貴金屬和寶石等高價值商品，再出售而獲取對價等\n或將不法所得轉匯至他帳戶\n或將現金存款轉變為其他金融票據、投資股票、債券和人壽保險\n或利用空殼公司隱匿不法資產等\n或將不法所得進行產業投資而經營正常工商活動\n或購買不動產、跑車、遊艇等奢侈品。'))
         return 0
 
     if event.message.text == '線上辦卡':
