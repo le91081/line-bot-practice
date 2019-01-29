@@ -612,6 +612,8 @@ def handle_message(event):
                 ]
             )
         )
+        line_bot_api.reply_message(event.reply_token, ButtonsTemplate)
+        return 0
     #endregion
 
     #region #######記帳功能########
