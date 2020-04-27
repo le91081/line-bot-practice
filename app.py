@@ -30,6 +30,8 @@ handler = WebhookHandler(config['line_bot']['Channel_Secret'])
 
 google_key = "AIzaSyCkXxylSFeJ0Q-vsTIfkC65PkfGIczMEiY"
 gmaps = googlemaps.Client(key=google_key)
+myLocalLat = 0.0
+myLocalLng = 0.0
 
 
 @app.route("/callback", methods=['POST'])
@@ -307,8 +309,7 @@ def panx():
         content += '{}\n{}\n\n'.format(title, link)
     return content
 
-global myLocalLat
-global myLocalLng
+
 
 ########GooglaMap########
 @handler.add(MessageEvent, message=LocationMessage)
@@ -1067,8 +1068,9 @@ def getNear(keyword):
         print('-----Lng in function : ',myLocalLng)
     except Exception:
         return -1
-    aa = gmaps.places_nearby(keyword=keyword, location=(
-        myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
+
+    aa = gmaps.places_nearby(keyword=keyword, location=(myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
+    print('google end')
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
