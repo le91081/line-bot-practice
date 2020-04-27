@@ -3,7 +3,7 @@ import re
 import random
 import configparser
 from bs4 import BeautifulSoup
-from flask import Flask, request, abort, json, jsonify, Response, render_template
+from flask import Flask, request, abort, json, jsonify, Response, render_template, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.types import INTEGER
 from sqlalchemy import or_, and_
@@ -317,8 +317,8 @@ def handle_locatiom(event):
     print("event.message.type", event.message.type)
     print("event.message.type", event.message)
     
-    global myLocalLat
-    global myLocalLng
+    # global myLocalLat
+    # global myLocalLng
     
     buttons_template = TemplateSendMessage(
         alt_text='地圖 template',
@@ -347,9 +347,9 @@ def handle_locatiom(event):
         )
     )
 
-    myLocalLat = event.message.latitude
-    myLocalLng = event.message.longitude
-    print("#####----------------",myLocalLat,myLocalLng,"----------------#####")
+    g.myLocalLat = event.message.latitude
+    g.myLocalLng = event.message.longitude
+    print("#####----------------",g.myLocalLat,g.myLocalLng,"----------------#####")
 
     line_bot_api.reply_message(event.reply_token, buttons_template)
     return 0
@@ -1060,16 +1060,16 @@ def getPlace():
 #地圖搜尋func
 @app.route("/getNear", methods=['GET'])
 def getNear(keyword):
-    global myLocalLat
-    global myLocalLng
+    # global myLocalLat
+    # global myLocalLng
     print("-----------------Start Get Resturant------------------")
     try:
-        print('-----Lat in function : ',myLocalLat)
-        print('-----Lng in function : ',myLocalLng)
+        print('-----Lat in function : ',g.myLocalLat)
+        print('-----Lng in function : ',g.myLocalLng)
     except Exception:
         return -1
     print('--------------google start')
-    aa = gmaps.places_nearby(keyword=keyword, location=(myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
+    aa = gmaps.places_nearby(keyword=keyword, location=(g.myLocalLat, g.myLocalLng), language="zh-TW", rank_by="distance")['results']
     # aa = gmaps.places_nearby(keyword=keyword, location=(25.041794, 121.52599), language="zh-TW", rank_by="distance")['results']
 
     print('--------------google end')
