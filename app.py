@@ -1072,7 +1072,7 @@ def getNear(keyword):
     # aa = gmaps.places_nearby(keyword=keyword, location=(myLocalLat, myLocalLng), language="zh-TW", rank_by="distance")['results']
     aa = gmaps.places_nearby(keyword=keyword, location=(25.041794, 121.52599), language="zh-TW", rank_by="distance")['results']
 
-    print('--------------google end')
+    print('--------------google end',aa)
     nearAry = []
     baseUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={}&key={}"
     imgurl = ""
